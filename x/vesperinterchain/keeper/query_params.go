@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 )
 
 func (q queryServer) Params(ctx context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {

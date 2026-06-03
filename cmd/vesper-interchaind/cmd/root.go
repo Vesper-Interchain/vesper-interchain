@@ -17,7 +17,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/spf13/cobra"
 
-	"github.com/preetsinghmakkar/vesper-interchain/app"
+	"github.com/Vesper-Interchain/vesper-interchain/app"
 )
 
 // NewRootCmd creates a new root command for vesper-interchaind. It is called once in the main function.

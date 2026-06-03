@@ -13,9 +13,9 @@ import (
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/keeper"
-	module "github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/module"
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/keeper"
+	module "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/module"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 )
 
 type fixture struct {

@@ -7,7 +7,7 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "vesperinterchain/vesperinterchain/v1/params.proto";
 
-option go_package = "github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types";
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types";
 
 // Msg defines the Msg service.
 service Msg {

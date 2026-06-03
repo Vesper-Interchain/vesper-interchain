@@ -4,7 +4,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 )
 
 // GenerateGenesisState creates a randomized GenState of the module.

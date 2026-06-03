@@ -7,7 +7,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "vesperinterchain/vesperinterchain/v1/params.proto";
 
-option go_package = "github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types";
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types";
 
 // Query defines the gRPC querier service.
 service Query {

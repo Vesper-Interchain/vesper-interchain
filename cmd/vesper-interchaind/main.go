@@ -7,8 +7,8 @@ import (
 	clienthelpers "cosmossdk.io/client/v2/helpers"
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	"github.com/preetsinghmakkar/vesper-interchain/app"
-	"github.com/preetsinghmakkar/vesper-interchain/cmd/vesper-interchaind/cmd"
+	"github.com/Vesper-Interchain/vesper-interchain/app"
+	"github.com/Vesper-Interchain/vesper-interchain/cmd/vesper-interchaind/cmd"
 )
 
 func main() {

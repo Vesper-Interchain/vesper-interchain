@@ -3,7 +3,7 @@ package vesperinterchain
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

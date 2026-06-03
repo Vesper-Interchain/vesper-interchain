@@ -3,7 +3,7 @@ package types_test
 import (
 	"testing"
 
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 	"github.com/stretchr/testify/require"
 )
 

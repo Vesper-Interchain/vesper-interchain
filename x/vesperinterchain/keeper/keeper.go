@@ -8,7 +8,7 @@ import (
 	corestore "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 )
 
 type Keeper struct {

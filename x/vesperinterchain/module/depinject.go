@@ -9,8 +9,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/keeper"
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/keeper"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 )
 
 var _ depinject.OnePerModuleType = AppModule{}

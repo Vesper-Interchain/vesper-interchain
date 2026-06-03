@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 )
 
 // InitGenesis initializes the module's state from a provided genesis state.

@@ -1,4 +1,4 @@
-module github.com/preetsinghmakkar/vesper-interchain
+module github.com/Vesper-Interchain/vesper-interchain
 
 go 1.25.10
 

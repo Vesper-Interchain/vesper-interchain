@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 )
 
 type msgServer struct {

@@ -45,8 +45,8 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v10/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v10/modules/core/keeper"
 
-	"github.com/preetsinghmakkar/vesper-interchain/docs"
-	vesperinterchainmodulekeeper "github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/keeper"
+	"github.com/Vesper-Interchain/vesper-interchain/docs"
+	vesperinterchainmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/keeper"
 )
 
 const (

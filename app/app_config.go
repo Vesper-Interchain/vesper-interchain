@@ -67,8 +67,8 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
-	_ "github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/module"
-	vesperinterchainmoduletypes "github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types"
+	_ "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/module"
+	vesperinterchainmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
