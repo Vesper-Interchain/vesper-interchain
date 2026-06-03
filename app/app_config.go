@@ -36,6 +36,8 @@ import (
 	_ "cosmossdk.io/x/nft/module" // import for side-effects
 	_ "cosmossdk.io/x/upgrade"    // import for side-effects
 	upgradetypes "cosmossdk.io/x/upgrade/types"
+	_ "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/module"
+	vesperinterchainmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types" // import for side-effects
@@ -64,11 +66,12 @@ import (
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	_ "github.com/cosmos/cosmos-sdk/x/staking" // import for side-effects
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	erc20types "github.com/cosmos/evm/x/erc20/types"
+	feemarkettypes "github.com/cosmos/evm/x/feemarket/types"
+	evmtypes "github.com/cosmos/evm/x/vm/types"
 	icatypes "github.com/cosmos/ibc-go/v10/modules/apps/27-interchain-accounts/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v10/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v10/modules/core/exported"
-	_ "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/module"
-	vesperinterchainmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
@@ -83,9 +86,10 @@ var (
 		{Account: nft.ModuleName},
 		{Account: ibctransfertypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: icatypes.ModuleName},
+		{Account: evmtypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}}, {Account: erc20types.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+		{Account: feemarkettypes.ModuleName},
+		// blocked account addresses
 	}
-
-	// blocked account addresses
 	blockAccAddrs = []string{
 		authtypes.FeeCollectorName,
 		distrtypes.ModuleName,
@@ -151,7 +155,7 @@ var (
 						slashingtypes.ModuleName,
 						govtypes.ModuleName,
 						minttypes.ModuleName,
-						genutiltypes.ModuleName,
+
 						evidencetypes.ModuleName,
 						authz.ModuleName,
 						feegrant.ModuleName,
@@ -187,7 +191,7 @@ var (
 			{
 				Name: banktypes.ModuleName,
 				Config: appconfig.WrapAny(&bankmodulev1.Module{
-					BlockedModuleAccountsOverride: blockAccAddrs,
+					BlockedModuleAccountsOverride: getBlockAccAddrs(),
 				}),
 			},
 			{
@@ -267,3 +271,11 @@ var (
 			}},
 	})
 )
+
+func getBlockAccAddrs() []string {
+	for _, precompile := range evmtypes.AvailableStaticPrecompiles {
+		blockAccAddrs = append(blockAccAddrs, precompile)
+	}
+
+	return blockAccAddrs
+}
