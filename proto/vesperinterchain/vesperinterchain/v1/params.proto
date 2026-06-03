@@ -1,0 +1,13 @@
+syntax = "proto3";
+package vesperinterchain.vesperinterchain.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/preetsinghmakkar/vesper-interchain/x/vesperinterchain/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "vesperinterchain/x/vesperinterchain/Params";
+  option (gogoproto.equal) = true;
+}
