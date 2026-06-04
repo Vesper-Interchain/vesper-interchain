@@ -27,6 +27,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "UpdatePrice",
+					Use:            "update-price [denom] [price] [source]",
+					Short:          "Send a updatePrice tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "denom"}, {ProtoField: "price"}, {ProtoField: "source"}},
+				},
 			},
 		},
 	}
