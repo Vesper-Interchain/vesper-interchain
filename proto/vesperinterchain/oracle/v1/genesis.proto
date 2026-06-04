@@ -1,0 +1,17 @@
+syntax = "proto3";
+package vesperinterchain.oracle.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "vesperinterchain/oracle/v1/params.proto";
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/oracle/types";
+
+// GenesisState defines the oracle module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

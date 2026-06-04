@@ -59,6 +59,7 @@ import (
 
 	"github.com/Vesper-Interchain/vesper-interchain/docs"
 	collateralmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/collateral/keeper"
+	oraclemodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/oracle/keeper"
 	vesperinterchainmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/keeper"
 )
 
@@ -124,6 +125,7 @@ type App struct {
 	Erc20Keeper            erc20keeper.Keeper
 	EVMMempool             *evmmempool.ExperimentalEVMMempool
 	CollateralKeeper       collateralmodulekeeper.Keeper
+	OracleKeeper           oraclemodulekeeper.Keeper
 }
 
 func init() {
@@ -209,6 +211,7 @@ func New(
 		&app.ParamsKeeper,
 		&app.VesperinterchainKeeper, &app.FeeGrantKeeper,
 		&app.CollateralKeeper,
+		&app.OracleKeeper,
 	); err != nil {
 		panic(err)
 	}
