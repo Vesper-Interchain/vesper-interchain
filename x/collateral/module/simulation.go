@@ -1,9 +1,13 @@
 package collateral
 
 import (
+	"math/rand"
+
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	"github.com/cosmos/cosmos-sdk/x/simulation"
 
+	collateralsimulation "github.com/Vesper-Interchain/vesper-interchain/x/collateral/simulation"
 	"github.com/Vesper-Interchain/vesper-interchain/x/collateral/types"
 )
 
@@ -25,6 +29,22 @@ func (am AppModule) RegisterStoreDecoder(_ simtypes.StoreDecoderRegistry) {}
 // WeightedOperations returns the all the gov module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
+	const (
+		opWeightMsgDepositCollateral          = "op_weight_msg_collateral"
+		defaultWeightMsgDepositCollateral int = 100
+	)
+
+	var weightMsgDepositCollateral int
+	simState.AppParams.GetOrGenerate(opWeightMsgDepositCollateral, &weightMsgDepositCollateral, nil,
+		func(_ *rand.Rand) {
+			weightMsgDepositCollateral = defaultWeightMsgDepositCollateral
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgDepositCollateral,
+		collateralsimulation.SimulateMsgDepositCollateral(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+	))
+
 	return operations
 }
 

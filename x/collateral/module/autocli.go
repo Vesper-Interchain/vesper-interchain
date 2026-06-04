@@ -27,6 +27,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "DepositCollateral",
+					Use:            "deposit-collateral [denom] [amount]",
+					Short:          "Send a depositCollateral tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "denom"}, {ProtoField: "amount"}},
+				},
 			},
 		},
 	}
