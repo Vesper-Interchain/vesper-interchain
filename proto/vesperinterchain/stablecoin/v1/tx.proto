@@ -20,6 +20,9 @@ service Msg {
 
   // MintStablecoin defines the MintStablecoin RPC.
   rpc MintStablecoin(MsgMintStablecoin) returns (MsgMintStablecoinResponse);
+
+  // BurnStablecoin defines the BurnStablecoin RPC.
+  rpc BurnStablecoin(MsgBurnStablecoin) returns (MsgBurnStablecoinResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -53,3 +56,14 @@ message MsgMintStablecoin {
 
 // MsgMintStablecoinResponse defines the MsgMintStablecoinResponse message.
 message MsgMintStablecoinResponse {}
+
+// MsgBurnStablecoin defines the MsgBurnStablecoin message.
+message MsgBurnStablecoin {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 2;
+  uint64 position_id = 3;
+}
+
+// MsgBurnStablecoinResponse defines the MsgBurnStablecoinResponse message.
+message MsgBurnStablecoinResponse {}

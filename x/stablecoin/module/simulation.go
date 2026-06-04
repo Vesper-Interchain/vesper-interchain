@@ -44,6 +44,21 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		weightMsgMintStablecoin,
 		stablecoinsimulation.SimulateMsgMintStablecoin(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
 	))
+	const (
+		opWeightMsgBurnStablecoin          = "op_weight_msg_stablecoin"
+		defaultWeightMsgBurnStablecoin int = 100
+	)
+
+	var weightMsgBurnStablecoin int
+	simState.AppParams.GetOrGenerate(opWeightMsgBurnStablecoin, &weightMsgBurnStablecoin, nil,
+		func(_ *rand.Rand) {
+			weightMsgBurnStablecoin = defaultWeightMsgBurnStablecoin
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgBurnStablecoin,
+		stablecoinsimulation.SimulateMsgBurnStablecoin(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+	))
 
 	return operations
 }
