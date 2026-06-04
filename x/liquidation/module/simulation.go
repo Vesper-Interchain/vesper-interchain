@@ -1,9 +1,13 @@
 package liquidation
 
 import (
+	"math/rand"
+
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	"github.com/cosmos/cosmos-sdk/x/simulation"
 
+	liquidationsimulation "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/simulation"
 	"github.com/Vesper-Interchain/vesper-interchain/x/liquidation/types"
 )
 
@@ -25,6 +29,22 @@ func (am AppModule) RegisterStoreDecoder(_ simtypes.StoreDecoderRegistry) {}
 // WeightedOperations returns the all the gov module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
+	const (
+		opWeightMsgExecuteLiquidation          = "op_weight_msg_liquidation"
+		defaultWeightMsgExecuteLiquidation int = 100
+	)
+
+	var weightMsgExecuteLiquidation int
+	simState.AppParams.GetOrGenerate(opWeightMsgExecuteLiquidation, &weightMsgExecuteLiquidation, nil,
+		func(_ *rand.Rand) {
+			weightMsgExecuteLiquidation = defaultWeightMsgExecuteLiquidation
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgExecuteLiquidation,
+		liquidationsimulation.SimulateMsgExecuteLiquidation(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+	))
+
 	return operations
 }
 
