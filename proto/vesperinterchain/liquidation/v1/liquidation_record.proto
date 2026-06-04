@@ -1,0 +1,15 @@
+syntax = "proto3";
+package vesperinterchain.liquidation.v1;
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/types";
+
+// LiquidationRecord defines the LiquidationRecord message.
+message LiquidationRecord {
+  uint64 position_id = 1;
+  string liquidator = 2;
+  string collateral_received = 3;
+  string debt_repaid = 4;
+  string penalty = 5;
+  int64 timestamp = 6;
+  string tx_hash = 7;
+}
