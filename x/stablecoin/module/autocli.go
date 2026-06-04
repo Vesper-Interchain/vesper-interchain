@@ -27,6 +27,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
 				},
+				{
+					RpcMethod:      "MintStablecoin",
+					Use:            "mint-stablecoin [position-id] [amount]",
+					Short:          "Send a mintStablecoin tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "position_id"}, {ProtoField: "amount"}},
+				},
 			},
 		},
 	}
