@@ -29,6 +29,9 @@ service Msg {
 
   // RepayDebt defines the RepayDebt RPC.
   rpc RepayDebt(MsgRepayDebt) returns (MsgRepayDebtResponse);
+
+  // LiquidatePosition defines the LiquidatePosition RPC.
+  rpc LiquidatePosition(MsgLiquidatePosition) returns (MsgLiquidatePositionResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -95,3 +98,13 @@ message MsgRepayDebt {
 
 // MsgRepayDebtResponse defines the MsgRepayDebtResponse message.
 message MsgRepayDebtResponse {}
+
+// MsgLiquidatePosition defines the MsgLiquidatePosition message.
+message MsgLiquidatePosition {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 position_id = 2;
+}
+
+// MsgLiquidatePositionResponse defines the MsgLiquidatePositionResponse message.
+message MsgLiquidatePositionResponse {}

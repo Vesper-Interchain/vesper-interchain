@@ -51,6 +51,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a repayDebt tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "position_id"}, {ProtoField: "amount"}},
 				},
+				{
+					RpcMethod:      "LiquidatePosition",
+					Use:            "liquidate-position [position-id]",
+					Short:          "Send a liquidatePosition tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "position_id"}},
+				},
 			},
 		},
 	}
