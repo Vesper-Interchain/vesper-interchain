@@ -1,0 +1,13 @@
+syntax = "proto3";
+package vesperinterchain.stablecoin.v1;
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/types";
+
+// DebtCeiling defines the DebtCeiling message.
+message DebtCeiling {
+  string collateral_type = 1;
+  string ceiling_amount = 2;
+  string current_debt = 3;
+  string utilization = 4;
+  bool enabled = 5;
+}
