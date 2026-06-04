@@ -20,6 +20,9 @@ service Msg {
 
   // DepositCollateral defines the DepositCollateral RPC.
   rpc DepositCollateral(MsgDepositCollateral) returns (MsgDepositCollateralResponse);
+
+  // WithdrawCollateral defines the WithdrawCollateral RPC.
+  rpc WithdrawCollateral(MsgWithdrawCollateral) returns (MsgWithdrawCollateralResponse);
 }
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
@@ -53,3 +56,14 @@ message MsgDepositCollateral {
 
 // MsgDepositCollateralResponse defines the MsgDepositCollateralResponse message.
 message MsgDepositCollateralResponse {}
+
+// MsgWithdrawCollateral defines the MsgWithdrawCollateral message.
+message MsgWithdrawCollateral {
+  option (cosmos.msg.v1.signer) = "creator";
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  uint64 position_id = 2;
+  string amount = 3;
+}
+
+// MsgWithdrawCollateralResponse defines the MsgWithdrawCollateralResponse message.
+message MsgWithdrawCollateralResponse {}

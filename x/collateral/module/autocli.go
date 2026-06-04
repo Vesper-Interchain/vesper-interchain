@@ -33,6 +33,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a depositCollateral tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "denom"}, {ProtoField: "amount"}},
 				},
+				{
+					RpcMethod:      "WithdrawCollateral",
+					Use:            "withdraw-collateral [position-id] [amount]",
+					Short:          "Send a withdrawCollateral tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "position_id"}, {ProtoField: "amount"}},
+				},
 			},
 		},
 	}
