@@ -59,6 +59,21 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		weightMsgWithdrawCollateral,
 		collateralsimulation.SimulateMsgWithdrawCollateral(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
 	))
+	const (
+		opWeightMsgMintStablecoin          = "op_weight_msg_collateral"
+		defaultWeightMsgMintStablecoin int = 100
+	)
+
+	var weightMsgMintStablecoin int
+	simState.AppParams.GetOrGenerate(opWeightMsgMintStablecoin, &weightMsgMintStablecoin, nil,
+		func(_ *rand.Rand) {
+			weightMsgMintStablecoin = defaultWeightMsgMintStablecoin
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgMintStablecoin,
+		collateralsimulation.SimulateMsgMintStablecoin(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+	))
 
 	return operations
 }
