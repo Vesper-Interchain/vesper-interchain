@@ -36,6 +36,8 @@ import (
 	_ "cosmossdk.io/x/nft/module" // import for side-effects
 	_ "cosmossdk.io/x/upgrade"    // import for side-effects
 	upgradetypes "cosmossdk.io/x/upgrade/types"
+	_ "github.com/Vesper-Interchain/vesper-interchain/x/collateral/module"
+	collateralmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types"
 	_ "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/module"
 	vesperinterchainmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
@@ -89,7 +91,7 @@ var (
 		{Account: evmtypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}}, {Account: erc20types.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: feemarkettypes.ModuleName},
 		// blocked account addresses
-	}
+		{Account: collateralmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}}}
 	blockAccAddrs = []string{
 		authtypes.FeeCollectorName,
 		distrtypes.ModuleName,
@@ -128,14 +130,14 @@ var (
 						// ibc modules
 						ibcexported.ModuleName,
 						// chain modules
-						vesperinterchainmoduletypes.ModuleName},
+						vesperinterchainmoduletypes.ModuleName, collateralmoduletypes.ModuleName},
 					EndBlockers: []string{
 						govtypes.ModuleName,
 						stakingtypes.ModuleName,
 						feegrant.ModuleName,
 						group.ModuleName,
 						// chain modules
-						vesperinterchainmoduletypes.ModuleName},
+						vesperinterchainmoduletypes.ModuleName, collateralmoduletypes.ModuleName},
 					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
 						{
@@ -170,7 +172,7 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						// chain modules
-						vesperinterchainmoduletypes.ModuleName},
+						vesperinterchainmoduletypes.ModuleName, collateralmoduletypes.ModuleName},
 				}),
 			},
 			{
@@ -268,6 +270,9 @@ var (
 			{
 				Name:   vesperinterchainmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&vesperinterchainmoduletypes.Module{}),
+			}, {
+				Name:   collateralmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&collateralmoduletypes.Module{}),
 			}},
 	})
 )

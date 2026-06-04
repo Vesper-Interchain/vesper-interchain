@@ -58,6 +58,7 @@ import (
 	"github.com/spf13/cast"
 
 	"github.com/Vesper-Interchain/vesper-interchain/docs"
+	collateralmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/collateral/keeper"
 	vesperinterchainmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/keeper"
 )
 
@@ -122,6 +123,7 @@ type App struct {
 	EVMKeeper              *evmkeeper.Keeper
 	Erc20Keeper            erc20keeper.Keeper
 	EVMMempool             *evmmempool.ExperimentalEVMMempool
+	CollateralKeeper       collateralmodulekeeper.Keeper
 }
 
 func init() {
@@ -206,6 +208,7 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.ParamsKeeper,
 		&app.VesperinterchainKeeper, &app.FeeGrantKeeper,
+		&app.CollateralKeeper,
 	); err != nil {
 		panic(err)
 	}

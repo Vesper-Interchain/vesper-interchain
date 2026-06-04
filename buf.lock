@@ -7,6 +7,9 @@ deps:
   - name: buf.build/cosmos/cosmos-sdk
     commit: 65fa41963e6a41dd95a35934239029df
     digest: b5:45c2788f1c8ca1c0e72f643d51dba37c3b25d113ee166277cd60dfd49404e713a178e177beaa7d6d016f3853722d77f8fbf40e9444e173cd3d89754d39ca0427
+  - name: buf.build/cosmos/evm
+    commit: 5bbc59c5e38440cb8ede77505362af3a
+    digest: b5:f0e6ade9fd7239db5509a27ddd75980120ff4cd592b505f2a1e74f1e2e3e40cbb8eca78550cf3d7f6df598f13e0772b105aff608a8210fee8dad3272671ace80
   - name: buf.build/cosmos/gogo-proto
     commit: 88ef6483f90f478fb938c37dde52ece3
     digest: b5:f0c69202c9bca9672dc72a9737ea9bc83744daaed2b3da77e3a95b0e53b86dee76b5a7405b993181d6c863fd64afaca0976a302f700d6c4912eb1692a1782c0a

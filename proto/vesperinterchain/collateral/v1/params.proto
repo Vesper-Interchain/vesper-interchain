@@ -1,0 +1,13 @@
+syntax = "proto3";
+package vesperinterchain.collateral.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "vesperinterchain/x/collateral/Params";
+  option (gogoproto.equal) = true;
+}
