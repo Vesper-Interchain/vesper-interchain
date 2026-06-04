@@ -1,0 +1,16 @@
+syntax = "proto3";
+package vesperinterchain.liquidation.v1;
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/types";
+
+// LiquidationQueue defines the LiquidationQueue message.
+message LiquidationQueue {
+  uint64 position_id = 1;
+  string owner = 2;
+  string collateral_type = 3;
+  string collateral_amount = 4;
+  string debt_amount = 5;
+  string health_factor = 6;
+  int64 timestamp = 7;
+  string status = 8;
+}
