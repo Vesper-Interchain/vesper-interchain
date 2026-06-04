@@ -45,6 +45,12 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Short:          "Send a mintStablecoin tx",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "position_id"}, {ProtoField: "amount"}},
 				},
+				{
+					RpcMethod:      "RepayDebt",
+					Use:            "repay-debt [position-id] [amount]",
+					Short:          "Send a repayDebt tx",
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "position_id"}, {ProtoField: "amount"}},
+				},
 			},
 		},
 	}
