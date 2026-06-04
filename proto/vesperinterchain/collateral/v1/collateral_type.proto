@@ -1,0 +1,16 @@
+syntax = "proto3";
+package vesperinterchain.collateral.v1;
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types";
+
+// CollateralType defines the CollateralType message.
+message CollateralType {
+  string denom = 1;
+  string name = 2;
+  int64 decimals = 3;
+  string liquidation_ratio = 4;
+  string minting_ratio = 5;
+  string stability_fee = 6;
+  string liquidation_penalty = 7;
+  bool enabled = 8;
+}
