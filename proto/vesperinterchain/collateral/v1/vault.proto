@@ -1,0 +1,14 @@
+syntax = "proto3";
+package vesperinterchain.collateral.v1;
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types";
+
+// Vault defines the Vault message.
+message Vault {
+  string collateral_type = 1;
+  string total_collateral = 2;
+  string total_debt = 3;
+  string utilization_ratio = 4;
+  string debt_ceiling = 5;
+  int64 last_updated = 6;
+}
