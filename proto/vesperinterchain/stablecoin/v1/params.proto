@@ -1,0 +1,13 @@
+syntax = "proto3";
+package vesperinterchain.stablecoin.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "vesperinterchain/x/stablecoin/Params";
+  option (gogoproto.equal) = true;
+}

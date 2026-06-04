@@ -1,0 +1,17 @@
+syntax = "proto3";
+package vesperinterchain.stablecoin.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "vesperinterchain/stablecoin/v1/params.proto";
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/types";
+
+// GenesisState defines the stablecoin module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}

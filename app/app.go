@@ -61,6 +61,7 @@ import (
 	collateralmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/collateral/keeper"
 	liquidationmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/keeper"
 	oraclemodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/oracle/keeper"
+	stablecoinmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/keeper"
 	vesperinterchainmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/keeper"
 )
 
@@ -128,6 +129,7 @@ type App struct {
 	CollateralKeeper       collateralmodulekeeper.Keeper
 	OracleKeeper           oraclemodulekeeper.Keeper
 	LiquidationKeeper      liquidationmodulekeeper.Keeper
+	StablecoinKeeper       stablecoinmodulekeeper.Keeper
 }
 
 func init() {
@@ -215,6 +217,7 @@ func New(
 		&app.CollateralKeeper,
 		&app.OracleKeeper,
 		&app.LiquidationKeeper,
+		&app.StablecoinKeeper,
 	); err != nil {
 		panic(err)
 	}
