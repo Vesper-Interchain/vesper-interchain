@@ -21,6 +21,7 @@ type Keeper struct {
 
 	Schema collections.Schema
 	Params collections.Item[types.Params]
+	Prices collections.Map[string, types.Price] 
 
 	bankKeeper types.BankKeeper
 }
@@ -46,7 +47,21 @@ func NewKeeper(
 		authority:    authority,
 
 		bankKeeper: bankKeeper,
-		Params:     collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+
+		Params: collections.NewItem(
+			sb,
+			types.ParamsKey,
+			"params",
+			codec.CollValue[types.Params](cdc),
+		),
+		
+		Prices: collections.NewMap(
+			sb,
+			types.PriceKey,
+			"prices",
+			collections.StringKey,
+			codec.CollValue[types.Price](cdc),
+		),
 	}
 
 	schema, err := sb.Build()

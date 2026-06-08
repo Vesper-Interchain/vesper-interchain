@@ -6,6 +6,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "vesperinterchain/oracle/v1/params.proto";
+import "vesperinterchain/oracle/v1/price.proto";
 
 option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/oracle/types";
 
@@ -14,6 +15,16 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/Vesper-Interchain/vesper-interchain/oracle/v1/params";
+  }
+
+  // Price queries a single price by denom
+  rpc Price(QueryPriceRequest) returns (QueryPriceResponse) {
+    option (google.api.http).get = "/Vesper-Interchain/vesper-interchain/oracle/v1/price/{denom}";
+  }
+
+  // Prices queries all prices with pagination
+  rpc Prices(QueryPricesRequest) returns (QueryPricesResponse) {
+    option (google.api.http).get = "/Vesper-Interchain/vesper-interchain/oracle/v1/prices";
   }
 }
 
@@ -27,4 +38,25 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+// QueryPriceRequest is request type for the Query/Price RPC method.
+message QueryPriceRequest {
+  string denom = 1;
+}
+
+// QueryPriceResponse is response type for the Query/Price RPC method.
+message QueryPriceResponse {
+  Price price = 1;
+}
+
+// QueryPricesRequest is request type for the Query/Prices RPC method.
+message QueryPricesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryPricesResponse is response type for the Query/Prices RPC method.
+message QueryPricesResponse {
+  repeated Price prices = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
