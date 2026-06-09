@@ -1,23 +1,49 @@
 syntax = "proto3";
-
 package vesperinterchain.stablecoin.v1;
 
 import "google/api/annotations.proto";
 import "vesperinterchain/stablecoin/v1/params.proto";
-import "gogoproto/gogo.proto";
 
 option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/types";
 
 service Query {
+  // Params queries the parameters of the module
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/vesperinterchain/stablecoin/v1/params";
+  }
+
+  // TotalMinted queries the total amount of stablecoin ever minted
+  rpc TotalMinted(QueryTotalMintedRequest) returns (QueryTotalMintedResponse) {
+    option (google.api.http).get = "/vesperinterchain/stablecoin/v1/total_minted";
+  }
+
+  // TotalBurned queries the total amount of stablecoin ever burned
+  rpc TotalBurned(QueryTotalBurnedRequest) returns (QueryTotalBurnedResponse) {
+    option (google.api.http).get = "/vesperinterchain/stablecoin/v1/total_burned";
+  }
+
+  // CirculatingSupply queries the current circulating supply (minted - burned)
+  rpc CirculatingSupply(QueryCirculatingSupplyRequest) returns (QueryCirculatingSupplyResponse) {
+    option (google.api.http).get = "/vesperinterchain/stablecoin/v1/circulating_supply";
   }
 }
 
 message QueryParamsRequest {}
-
 message QueryParamsResponse {
-  Params params = 1 [
-    (gogoproto.nullable) = false
-  ];
+  Params params = 1;
+}
+
+message QueryTotalMintedRequest {}
+message QueryTotalMintedResponse {
+  string total_minted = 1;
+}
+
+message QueryTotalBurnedRequest {}
+message QueryTotalBurnedResponse {
+  string total_burned = 1;
+}
+
+message QueryCirculatingSupplyRequest {}
+message QueryCirculatingSupplyResponse {
+  string circulating_supply = 1;
 }

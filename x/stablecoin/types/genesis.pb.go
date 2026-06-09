@@ -27,9 +27,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // GenesisState defines the stablecoin module's genesis state.
 type GenesisState struct {
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
-	// total_minted tracks total supply minted (string representation of math.Int)
+	// total_minted tracks total supply minted
 	TotalMinted string `protobuf:"bytes,2,opt,name=total_minted,json=totalMinted,proto3" json:"total_minted,omitempty"`
-	// total_burned tracks total supply burned (string representation of math.Int)
+	// total_burned tracks total supply burned
 	TotalBurned string `protobuf:"bytes,3,opt,name=total_burned,json=totalBurned,proto3" json:"total_burned,omitempty"`
 }
 

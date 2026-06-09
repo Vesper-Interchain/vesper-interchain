@@ -6,7 +6,6 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
@@ -66,7 +65,7 @@ func (m *QueryParamsRequest) XXX_DiscardUnknown() {
 var xxx_messageInfo_QueryParamsRequest proto.InternalMessageInfo
 
 type QueryParamsResponse struct {
-	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
+	Params *Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
 }
 
 func (m *QueryParamsResponse) Reset()         { *m = QueryParamsResponse{} }
@@ -102,16 +101,262 @@ func (m *QueryParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryParamsResponse proto.InternalMessageInfo
 
-func (m *QueryParamsResponse) GetParams() Params {
+func (m *QueryParamsResponse) GetParams() *Params {
 	if m != nil {
 		return m.Params
 	}
-	return Params{}
+	return nil
+}
+
+type QueryTotalMintedRequest struct {
+}
+
+func (m *QueryTotalMintedRequest) Reset()         { *m = QueryTotalMintedRequest{} }
+func (m *QueryTotalMintedRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryTotalMintedRequest) ProtoMessage()    {}
+func (*QueryTotalMintedRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0638f56e729674ab, []int{2}
+}
+func (m *QueryTotalMintedRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryTotalMintedRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryTotalMintedRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryTotalMintedRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryTotalMintedRequest.Merge(m, src)
+}
+func (m *QueryTotalMintedRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryTotalMintedRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryTotalMintedRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryTotalMintedRequest proto.InternalMessageInfo
+
+type QueryTotalMintedResponse struct {
+	TotalMinted string `protobuf:"bytes,1,opt,name=total_minted,json=totalMinted,proto3" json:"total_minted,omitempty"`
+}
+
+func (m *QueryTotalMintedResponse) Reset()         { *m = QueryTotalMintedResponse{} }
+func (m *QueryTotalMintedResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryTotalMintedResponse) ProtoMessage()    {}
+func (*QueryTotalMintedResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0638f56e729674ab, []int{3}
+}
+func (m *QueryTotalMintedResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryTotalMintedResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryTotalMintedResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryTotalMintedResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryTotalMintedResponse.Merge(m, src)
+}
+func (m *QueryTotalMintedResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryTotalMintedResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryTotalMintedResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryTotalMintedResponse proto.InternalMessageInfo
+
+func (m *QueryTotalMintedResponse) GetTotalMinted() string {
+	if m != nil {
+		return m.TotalMinted
+	}
+	return ""
+}
+
+type QueryTotalBurnedRequest struct {
+}
+
+func (m *QueryTotalBurnedRequest) Reset()         { *m = QueryTotalBurnedRequest{} }
+func (m *QueryTotalBurnedRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryTotalBurnedRequest) ProtoMessage()    {}
+func (*QueryTotalBurnedRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0638f56e729674ab, []int{4}
+}
+func (m *QueryTotalBurnedRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryTotalBurnedRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryTotalBurnedRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryTotalBurnedRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryTotalBurnedRequest.Merge(m, src)
+}
+func (m *QueryTotalBurnedRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryTotalBurnedRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryTotalBurnedRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryTotalBurnedRequest proto.InternalMessageInfo
+
+type QueryTotalBurnedResponse struct {
+	TotalBurned string `protobuf:"bytes,1,opt,name=total_burned,json=totalBurned,proto3" json:"total_burned,omitempty"`
+}
+
+func (m *QueryTotalBurnedResponse) Reset()         { *m = QueryTotalBurnedResponse{} }
+func (m *QueryTotalBurnedResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryTotalBurnedResponse) ProtoMessage()    {}
+func (*QueryTotalBurnedResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0638f56e729674ab, []int{5}
+}
+func (m *QueryTotalBurnedResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryTotalBurnedResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryTotalBurnedResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryTotalBurnedResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryTotalBurnedResponse.Merge(m, src)
+}
+func (m *QueryTotalBurnedResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryTotalBurnedResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryTotalBurnedResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryTotalBurnedResponse proto.InternalMessageInfo
+
+func (m *QueryTotalBurnedResponse) GetTotalBurned() string {
+	if m != nil {
+		return m.TotalBurned
+	}
+	return ""
+}
+
+type QueryCirculatingSupplyRequest struct {
+}
+
+func (m *QueryCirculatingSupplyRequest) Reset()         { *m = QueryCirculatingSupplyRequest{} }
+func (m *QueryCirculatingSupplyRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryCirculatingSupplyRequest) ProtoMessage()    {}
+func (*QueryCirculatingSupplyRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0638f56e729674ab, []int{6}
+}
+func (m *QueryCirculatingSupplyRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryCirculatingSupplyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryCirculatingSupplyRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryCirculatingSupplyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCirculatingSupplyRequest.Merge(m, src)
+}
+func (m *QueryCirculatingSupplyRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryCirculatingSupplyRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCirculatingSupplyRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryCirculatingSupplyRequest proto.InternalMessageInfo
+
+type QueryCirculatingSupplyResponse struct {
+	CirculatingSupply string `protobuf:"bytes,1,opt,name=circulating_supply,json=circulatingSupply,proto3" json:"circulating_supply,omitempty"`
+}
+
+func (m *QueryCirculatingSupplyResponse) Reset()         { *m = QueryCirculatingSupplyResponse{} }
+func (m *QueryCirculatingSupplyResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryCirculatingSupplyResponse) ProtoMessage()    {}
+func (*QueryCirculatingSupplyResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0638f56e729674ab, []int{7}
+}
+func (m *QueryCirculatingSupplyResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryCirculatingSupplyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryCirculatingSupplyResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryCirculatingSupplyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryCirculatingSupplyResponse.Merge(m, src)
+}
+func (m *QueryCirculatingSupplyResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryCirculatingSupplyResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryCirculatingSupplyResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryCirculatingSupplyResponse proto.InternalMessageInfo
+
+func (m *QueryCirculatingSupplyResponse) GetCirculatingSupply() string {
+	if m != nil {
+		return m.CirculatingSupply
+	}
+	return ""
 }
 
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "vesperinterchain.stablecoin.v1.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "vesperinterchain.stablecoin.v1.QueryParamsResponse")
+	proto.RegisterType((*QueryTotalMintedRequest)(nil), "vesperinterchain.stablecoin.v1.QueryTotalMintedRequest")
+	proto.RegisterType((*QueryTotalMintedResponse)(nil), "vesperinterchain.stablecoin.v1.QueryTotalMintedResponse")
+	proto.RegisterType((*QueryTotalBurnedRequest)(nil), "vesperinterchain.stablecoin.v1.QueryTotalBurnedRequest")
+	proto.RegisterType((*QueryTotalBurnedResponse)(nil), "vesperinterchain.stablecoin.v1.QueryTotalBurnedResponse")
+	proto.RegisterType((*QueryCirculatingSupplyRequest)(nil), "vesperinterchain.stablecoin.v1.QueryCirculatingSupplyRequest")
+	proto.RegisterType((*QueryCirculatingSupplyResponse)(nil), "vesperinterchain.stablecoin.v1.QueryCirculatingSupplyResponse")
 }
 
 func init() {
@@ -119,26 +364,37 @@ func init() {
 }
 
 var fileDescriptor_0638f56e729674ab = []byte{
-	// 295 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x2a, 0x4b, 0x2d, 0x2e,
-	0x48, 0x2d, 0xca, 0xcc, 0x2b, 0x49, 0x2d, 0x4a, 0xce, 0x48, 0xcc, 0xcc, 0xd3, 0x2f, 0x2e, 0x49,
-	0x4c, 0xca, 0x49, 0x4d, 0xce, 0xcf, 0xcc, 0xd3, 0x2f, 0x33, 0xd4, 0x2f, 0x2c, 0x4d, 0x2d, 0xaa,
-	0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x92, 0x43, 0x57, 0xab, 0x87, 0x50, 0xab, 0x57, 0x66,
-	0x28, 0x25, 0x93, 0x9e, 0x9f, 0x9f, 0x9e, 0x93, 0xaa, 0x9f, 0x58, 0x90, 0xa9, 0x9f, 0x98, 0x97,
-	0x97, 0x5f, 0x92, 0x58, 0x92, 0x99, 0x9f, 0x57, 0x0c, 0xd1, 0x2d, 0xa5, 0x4d, 0xc0, 0xa6, 0x82,
-	0xc4, 0xa2, 0xc4, 0x5c, 0x98, 0x62, 0x91, 0xf4, 0xfc, 0xf4, 0x7c, 0x30, 0x53, 0x1f, 0xc4, 0x82,
-	0x88, 0x2a, 0x89, 0x70, 0x09, 0x05, 0x82, 0xdc, 0x13, 0x00, 0x56, 0x1a, 0x94, 0x5a, 0x58, 0x9a,
-	0x5a, 0x5c, 0xa2, 0x14, 0xcd, 0x25, 0x8c, 0x22, 0x5a, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0x2a, 0xe4,
-	0xc2, 0xc5, 0x06, 0x31, 0x52, 0x82, 0x51, 0x81, 0x51, 0x83, 0xdb, 0x48, 0x4d, 0x0f, 0xbf, 0xf3,
-	0xf5, 0x20, 0xfa, 0x9d, 0x58, 0x4e, 0xdc, 0x93, 0x67, 0x08, 0x82, 0xea, 0x35, 0x5a, 0xcd, 0xc8,
-	0xc5, 0x0a, 0x36, 0x5d, 0x68, 0x21, 0x23, 0x17, 0x1b, 0x44, 0x89, 0x90, 0x11, 0x21, 0xa3, 0x30,
-	0x5d, 0x29, 0x65, 0x4c, 0x92, 0x1e, 0x88, 0x1f, 0x94, 0xf4, 0x9a, 0x2e, 0x3f, 0x99, 0xcc, 0xa4,
-	0x21, 0xa4, 0xa6, 0x4f, 0x54, 0xe0, 0x39, 0x45, 0x9f, 0x78, 0x24, 0xc7, 0x78, 0xe1, 0x91, 0x1c,
-	0xe3, 0x83, 0x47, 0x72, 0x8c, 0x13, 0x1e, 0xcb, 0x31, 0x5c, 0x78, 0x2c, 0xc7, 0x70, 0xe3, 0xb1,
-	0x1c, 0x43, 0x94, 0x63, 0x7a, 0x66, 0x49, 0x46, 0x69, 0x92, 0x5e, 0x72, 0x7e, 0xae, 0x7e, 0x18,
-	0xd8, 0x2c, 0x5d, 0x4f, 0x84, 0x61, 0x10, 0xd3, 0x75, 0x91, 0x8c, 0xaf, 0x40, 0xb6, 0xa0, 0xa4,
-	0xb2, 0x20, 0xb5, 0x38, 0x89, 0x0d, 0x1c, 0x09, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0x3b,
-	0x27, 0xf4, 0xa3, 0x33, 0x02, 0x00, 0x00,
+	// 469 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0xcd, 0x6a, 0x14, 0x31,
+	0x1c, 0xdf, 0x08, 0x5d, 0x30, 0xeb, 0xa5, 0x51, 0xb0, 0x0e, 0x1a, 0x75, 0x0e, 0xa5, 0xa8, 0x9b,
+	0xa1, 0xdb, 0x82, 0x22, 0xb4, 0x60, 0x3d, 0x79, 0x10, 0xb5, 0x7e, 0x1c, 0xf4, 0x50, 0xb2, 0x63,
+	0x98, 0x06, 0x66, 0x93, 0x74, 0x92, 0x59, 0xdc, 0xab, 0x4f, 0x20, 0xf8, 0x04, 0xbe, 0x84, 0xcf,
+	0xe0, 0x49, 0x0a, 0x5e, 0x3c, 0xca, 0xae, 0x67, 0x9f, 0x41, 0x36, 0xc9, 0x32, 0x33, 0x3b, 0xac,
+	0xb3, 0xe3, 0xf5, 0xff, 0xff, 0x7d, 0x25, 0xf9, 0xcd, 0xc0, 0x3b, 0x63, 0xa6, 0x15, 0xcb, 0xb8,
+	0x30, 0x2c, 0x8b, 0x4f, 0x29, 0x17, 0x91, 0x36, 0x74, 0x98, 0xb2, 0x58, 0x72, 0x11, 0x8d, 0x77,
+	0xa3, 0xb3, 0x9c, 0x65, 0x13, 0xa2, 0x32, 0x69, 0x24, 0xc2, 0xcb, 0x58, 0x52, 0x60, 0xc9, 0x78,
+	0x37, 0xb8, 0x9e, 0x48, 0x99, 0xa4, 0x2c, 0xa2, 0x8a, 0x47, 0x54, 0x08, 0x69, 0xa8, 0xe1, 0x52,
+	0x68, 0xc7, 0x0e, 0xee, 0x36, 0x38, 0x29, 0x9a, 0xd1, 0x91, 0x07, 0x87, 0x57, 0x20, 0x7a, 0x31,
+	0x77, 0x7e, 0x6e, 0x87, 0xc7, 0xec, 0x2c, 0x67, 0xda, 0x84, 0xaf, 0xe1, 0xe5, 0xca, 0x54, 0x2b,
+	0x29, 0x34, 0x43, 0x87, 0xb0, 0xeb, 0xc8, 0x5b, 0xe0, 0x16, 0xd8, 0xe9, 0x0d, 0xb6, 0xc9, 0xbf,
+	0x83, 0x12, 0xcf, 0xf7, 0xac, 0xf0, 0x1a, 0xbc, 0x6a, 0x65, 0x5f, 0x49, 0x43, 0xd3, 0xa7, 0x73,
+	0xd6, 0xfb, 0x85, 0xe3, 0x01, 0xdc, 0xaa, 0xaf, 0xbc, 0xed, 0x6d, 0x78, 0xc9, 0xcc, 0xc7, 0x27,
+	0x23, 0x3b, 0xb7, 0xe6, 0x17, 0x8f, 0x7b, 0xa6, 0x80, 0x56, 0x95, 0x8f, 0xf2, 0x4c, 0xac, 0x50,
+	0x5e, 0xac, 0x96, 0x95, 0x87, 0x76, 0x5e, 0x51, 0x76, 0xd0, 0xf0, 0x26, 0xbc, 0x61, 0xe9, 0x8f,
+	0x79, 0x16, 0xe7, 0x29, 0x35, 0x5c, 0x24, 0x2f, 0x73, 0xa5, 0xd2, 0xc9, 0x42, 0xff, 0x19, 0xc4,
+	0xab, 0x00, 0xde, 0xa5, 0x0f, 0x51, 0x5c, 0x2c, 0x4f, 0xb4, 0xdd, 0x7a, 0xaf, 0xcd, 0x78, 0x99,
+	0x36, 0xf8, 0xb3, 0x01, 0x37, 0xac, 0x22, 0xfa, 0x02, 0x60, 0xd7, 0x5d, 0x21, 0x1a, 0x34, 0x5d,
+	0x75, 0xfd, 0x15, 0x83, 0xbd, 0x56, 0x1c, 0x17, 0x36, 0x24, 0x1f, 0x7f, 0xfc, 0xfe, 0x7c, 0x61,
+	0x07, 0x6d, 0x47, 0x6b, 0xd5, 0x08, 0x7d, 0x05, 0xb0, 0x57, 0x7a, 0x34, 0x74, 0x7f, 0x2d, 0xd3,
+	0x7a, 0x03, 0x82, 0x07, 0xed, 0x89, 0x3e, 0xf2, 0xbe, 0x8d, 0x4c, 0xd0, 0xbd, 0xa6, 0xc8, 0xe5,
+	0x16, 0x15, 0xc1, 0xdd, 0x43, 0xb7, 0x09, 0x5e, 0x29, 0x58, 0x9b, 0xe0, 0xd5, 0xfa, 0xb5, 0x0d,
+	0xee, 0x4a, 0x8a, 0xbe, 0x03, 0xb8, 0x59, 0x2b, 0x1b, 0x3a, 0x58, 0x2b, 0xc5, 0xaa, 0x16, 0x07,
+	0x87, 0xff, 0x4b, 0xf7, 0x47, 0x79, 0x68, 0x8f, 0xb2, 0x8f, 0x06, 0x4d, 0x47, 0xa9, 0x7f, 0x09,
+	0x47, 0xef, 0xbe, 0x4d, 0x31, 0x38, 0x9f, 0x62, 0xf0, 0x6b, 0x8a, 0xc1, 0xa7, 0x19, 0xee, 0x9c,
+	0xcf, 0x70, 0xe7, 0xe7, 0x0c, 0x77, 0xde, 0x3e, 0x4a, 0xb8, 0x39, 0xcd, 0x87, 0x24, 0x96, 0xa3,
+	0xe8, 0x8d, 0xd5, 0xed, 0x3f, 0x29, 0x84, 0x9d, 0x53, 0xbf, 0x64, 0xf5, 0xa1, 0x6c, 0x66, 0x26,
+	0x8a, 0xe9, 0x61, 0xd7, 0xfe, 0xe7, 0xf6, 0xfe, 0x06, 0x00, 0x00, 0xff, 0xff, 0x63, 0xa8, 0x04,
+	0x32, 0x80, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -153,7 +409,14 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
+	// Params queries the parameters of the module
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// TotalMinted queries the total amount of stablecoin ever minted
+	TotalMinted(ctx context.Context, in *QueryTotalMintedRequest, opts ...grpc.CallOption) (*QueryTotalMintedResponse, error)
+	// TotalBurned queries the total amount of stablecoin ever burned
+	TotalBurned(ctx context.Context, in *QueryTotalBurnedRequest, opts ...grpc.CallOption) (*QueryTotalBurnedResponse, error)
+	// CirculatingSupply queries the current circulating supply (minted - burned)
+	CirculatingSupply(ctx context.Context, in *QueryCirculatingSupplyRequest, opts ...grpc.CallOption) (*QueryCirculatingSupplyResponse, error)
 }
 
 type queryClient struct {
@@ -173,9 +436,43 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) TotalMinted(ctx context.Context, in *QueryTotalMintedRequest, opts ...grpc.CallOption) (*QueryTotalMintedResponse, error) {
+	out := new(QueryTotalMintedResponse)
+	err := c.cc.Invoke(ctx, "/vesperinterchain.stablecoin.v1.Query/TotalMinted", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) TotalBurned(ctx context.Context, in *QueryTotalBurnedRequest, opts ...grpc.CallOption) (*QueryTotalBurnedResponse, error) {
+	out := new(QueryTotalBurnedResponse)
+	err := c.cc.Invoke(ctx, "/vesperinterchain.stablecoin.v1.Query/TotalBurned", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) CirculatingSupply(ctx context.Context, in *QueryCirculatingSupplyRequest, opts ...grpc.CallOption) (*QueryCirculatingSupplyResponse, error) {
+	out := new(QueryCirculatingSupplyResponse)
+	err := c.cc.Invoke(ctx, "/vesperinterchain.stablecoin.v1.Query/CirculatingSupply", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
+	// Params queries the parameters of the module
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// TotalMinted queries the total amount of stablecoin ever minted
+	TotalMinted(context.Context, *QueryTotalMintedRequest) (*QueryTotalMintedResponse, error)
+	// TotalBurned queries the total amount of stablecoin ever burned
+	TotalBurned(context.Context, *QueryTotalBurnedRequest) (*QueryTotalBurnedResponse, error)
+	// CirculatingSupply queries the current circulating supply (minted - burned)
+	CirculatingSupply(context.Context, *QueryCirculatingSupplyRequest) (*QueryCirculatingSupplyResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -184,6 +481,15 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (*UnimplementedQueryServer) TotalMinted(ctx context.Context, req *QueryTotalMintedRequest) (*QueryTotalMintedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TotalMinted not implemented")
+}
+func (*UnimplementedQueryServer) TotalBurned(ctx context.Context, req *QueryTotalBurnedRequest) (*QueryTotalBurnedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TotalBurned not implemented")
+}
+func (*UnimplementedQueryServer) CirculatingSupply(ctx context.Context, req *QueryCirculatingSupplyRequest) (*QueryCirculatingSupplyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CirculatingSupply not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -208,6 +514,60 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_TotalMinted_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTotalMintedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TotalMinted(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/vesperinterchain.stablecoin.v1.Query/TotalMinted",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TotalMinted(ctx, req.(*QueryTotalMintedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_TotalBurned_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryTotalBurnedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).TotalBurned(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/vesperinterchain.stablecoin.v1.Query/TotalBurned",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).TotalBurned(ctx, req.(*QueryTotalBurnedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_CirculatingSupply_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryCirculatingSupplyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CirculatingSupply(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/vesperinterchain.stablecoin.v1.Query/CirculatingSupply",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CirculatingSupply(ctx, req.(*QueryCirculatingSupplyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "vesperinterchain.stablecoin.v1.Query",
@@ -216,6 +576,18 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "TotalMinted",
+			Handler:    _Query_TotalMinted_Handler,
+		},
+		{
+			MethodName: "TotalBurned",
+			Handler:    _Query_TotalBurned_Handler,
+		},
+		{
+			MethodName: "CirculatingSupply",
+			Handler:    _Query_CirculatingSupply_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -265,16 +637,177 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	{
-		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
+	if m.Params != nil {
+		{
+			size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
 		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0xa
 	}
-	i--
-	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryTotalMintedRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryTotalMintedRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryTotalMintedRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryTotalMintedResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryTotalMintedResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryTotalMintedResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.TotalMinted) > 0 {
+		i -= len(m.TotalMinted)
+		copy(dAtA[i:], m.TotalMinted)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.TotalMinted)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryTotalBurnedRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryTotalBurnedRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryTotalBurnedRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryTotalBurnedResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryTotalBurnedResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryTotalBurnedResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.TotalBurned) > 0 {
+		i -= len(m.TotalBurned)
+		copy(dAtA[i:], m.TotalBurned)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.TotalBurned)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryCirculatingSupplyRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryCirculatingSupplyRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryCirculatingSupplyRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryCirculatingSupplyResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryCirculatingSupplyResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryCirculatingSupplyResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.CirculatingSupply) > 0 {
+		i -= len(m.CirculatingSupply)
+		copy(dAtA[i:], m.CirculatingSupply)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.CirculatingSupply)))
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -304,8 +837,76 @@ func (m *QueryParamsResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = m.Params.Size()
-	n += 1 + l + sovQuery(uint64(l))
+	if m.Params != nil {
+		l = m.Params.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryTotalMintedRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *QueryTotalMintedResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TotalMinted)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryTotalBurnedRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *QueryTotalBurnedResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.TotalBurned)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryCirculatingSupplyRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *QueryCirculatingSupplyResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CirculatingSupply)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -423,9 +1024,408 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
+			if m.Params == nil {
+				m.Params = &Params{}
+			}
 			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryTotalMintedRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryTotalMintedRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryTotalMintedRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryTotalMintedResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryTotalMintedResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryTotalMintedResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TotalMinted", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TotalMinted = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryTotalBurnedRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryTotalBurnedRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryTotalBurnedRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryTotalBurnedResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryTotalBurnedResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryTotalBurnedResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TotalBurned", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TotalBurned = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryCirculatingSupplyRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryCirculatingSupplyRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryCirculatingSupplyRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryCirculatingSupplyResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryCirculatingSupplyResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryCirculatingSupplyResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CirculatingSupply", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CirculatingSupply = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

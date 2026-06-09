@@ -1,0 +1,10 @@
+syntax = "proto3";
+package vesperinterchain.stablecoin.v1;
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/types";
+
+// SupplyState tracks the total minted and burned supply
+message SupplyState {
+  string total_minted = 1;
+  string total_burned = 2;
+}

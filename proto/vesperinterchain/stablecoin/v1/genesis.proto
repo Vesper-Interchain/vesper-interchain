@@ -14,9 +14,9 @@ message GenesisState {
     (amino.dont_omitempty) = true
   ];
 
-  // total_minted tracks total supply minted (string representation of math.Int)
+  // total_minted tracks total supply minted
   string total_minted = 2;
-
-  // total_burned tracks total supply burned (string representation of math.Int)
+  
+  // total_burned tracks total supply burned
   string total_burned = 3;
 }
