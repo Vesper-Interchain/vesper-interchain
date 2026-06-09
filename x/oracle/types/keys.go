@@ -11,8 +11,8 @@ const (
 
 var (
     // Params storage
-    ParamsKey = collections.NewPrefix("p_oracle")
+    ParamsKey = collections.NewPrefix(0)
 
     // Price storage
-    PriceKey = collections.NewPrefix("price")
+    PriceKey = collections.NewPrefix(1)
 )
