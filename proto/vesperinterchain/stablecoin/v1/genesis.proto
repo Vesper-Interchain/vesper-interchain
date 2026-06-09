@@ -9,9 +9,14 @@ option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin
 
 // GenesisState defines the stablecoin module's genesis state.
 message GenesisState {
-  // params defines all the parameters of the module.
   Params params = 1 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+
+  // total_minted tracks total supply minted (string representation of math.Int)
+  string total_minted = 2;
+
+  // total_burned tracks total supply burned (string representation of math.Int)
+  string total_burned = 3;
 }

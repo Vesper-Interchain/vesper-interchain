@@ -8,14 +8,6 @@ import (
 
 func RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
 	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgBurnStablecoin{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgMintStablecoin{},
-	)
-
-	registrar.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUpdateParams{},
 	)
 	msgservice.RegisterMsgServiceDesc(registrar, &_Msg_serviceDesc)

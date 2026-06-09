@@ -10,4 +10,7 @@ option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin
 message Params {
   option (amino.name) = "vesperinterchain/x/stablecoin/Params";
   option (gogoproto.equal) = true;
+
+  // stable_denom is the denomination of the stablecoin (e.g., "uvusd")
+  string stable_denom = 1;
 }
