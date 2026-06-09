@@ -1,12 +1,17 @@
 package types
 
-// DONTCOVER
-
 import (
-	"cosmossdk.io/errors"
+	errorsmod "cosmossdk.io/errors"
 )
 
-// x/stablecoin module sentinel errors
 var (
-	ErrInvalidSigner = errors.Register(ModuleName, 1100, "expected gov account as only signer for proposal message")
+	ErrInvalidSigner = errorsmod.Register(ModuleName, 1, "invalid signer")
+
+	ErrInvalidAmount = errorsmod.Register(ModuleName, 2, "invalid amount")
+
+	ErrInvalidDenom = errorsmod.Register(ModuleName, 3, "invalid denomination")
+
+	ErrUnauthorized = errorsmod.Register(ModuleName, 4, "unauthorized")
+
+	ErrSupplyUnderflow = errorsmod.Register(ModuleName, 5, "burn amount exceeds minted supply")
 )
