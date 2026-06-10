@@ -58,7 +58,6 @@ import (
 	"github.com/spf13/cast"
 
 	"github.com/Vesper-Interchain/vesper-interchain/docs"
-	collateralmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/collateral/keeper"
 	liquidationmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/keeper"
 	oraclemodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/oracle/keeper"
 	stablecoinmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/keeper"
@@ -126,7 +125,6 @@ type App struct {
 	EVMKeeper              *evmkeeper.Keeper
 	Erc20Keeper            erc20keeper.Keeper
 	EVMMempool             *evmmempool.ExperimentalEVMMempool
-	CollateralKeeper       collateralmodulekeeper.Keeper
 	OracleKeeper           oraclemodulekeeper.Keeper
 	LiquidationKeeper      liquidationmodulekeeper.Keeper
 	StablecoinKeeper       stablecoinmodulekeeper.Keeper
@@ -214,7 +212,6 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.ParamsKeeper,
 		&app.VesperinterchainKeeper, &app.FeeGrantKeeper,
-		&app.CollateralKeeper,
 		&app.OracleKeeper,
 		&app.LiquidationKeeper,
 		&app.StablecoinKeeper,
