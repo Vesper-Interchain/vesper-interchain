@@ -79,3 +79,31 @@ func (k Keeper) HasPrice(ctx sdk.Context, denom string) bool {
 	_, err := k.Prices.Get(ctx, denom)
 	return err == nil
 }
+
+// GetPriceValue returns the price as a decimal for a denomination
+func (k Keeper) GetPriceValue(ctx sdk.Context, denom string) (math.LegacyDec, error) {
+	price, err := k.GetPrice(ctx, denom)
+	if err != nil {
+		return math.LegacyDec{}, err
+	}
+
+	priceDec, err := math.LegacyNewDecFromStr(price.Price)
+	if err != nil {
+		return math.LegacyDec{}, types.ErrInvalidPrice.Wrapf("invalid price decimal for %s: %s", denom, price.Price)
+	}
+
+	return priceDec, nil
+}
+
+// IsPriceStale checks if a price is stale (older than maxAgeSeconds)
+func (k Keeper) IsPriceStale(ctx sdk.Context, denom string, maxAgeSeconds int64) (bool, error) {
+	price, err := k.GetPrice(ctx, denom)
+	if err != nil {
+		return true, err
+	}
+
+	currentTime := ctx.BlockTime().Unix()
+	ageSeconds := currentTime - price.Timestamp
+
+	return ageSeconds > maxAgeSeconds, nil
+}
