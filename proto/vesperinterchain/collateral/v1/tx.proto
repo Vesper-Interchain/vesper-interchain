@@ -1,4 +1,5 @@
 syntax = "proto3";
+
 package vesperinterchain.collateral.v1;
 
 import "amino/amino.proto";
@@ -9,32 +10,92 @@ import "vesperinterchain/collateral/v1/params.proto";
 
 option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types";
 
-// Msg defines the Msg service.
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
-  // UpdateParams defines a (governance) operation for updating the module
-  // parameters. The authority defaults to the x/gov module account.
+  rpc DepositCollateral(MsgDepositCollateral) returns (MsgDepositCollateralResponse);
+  rpc WithdrawCollateral(MsgWithdrawCollateral) returns (MsgWithdrawCollateralResponse);
+  rpc MintStablecoin(MsgMintStablecoin) returns (MsgMintStablecoinResponse);
+  rpc RepayDebt(MsgRepayDebt) returns (MsgRepayDebtResponse);
+  rpc LiquidatePosition(MsgLiquidatePosition) returns (MsgLiquidatePositionResponse);
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
-// MsgUpdateParams is the Msg/UpdateParams request type.
+message MsgDepositCollateral {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "collateral/MsgDeposbashitCollateral";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 2;
+}
+
+message MsgDepositCollateralResponse {
+  string owner = 1;
+  string collateral_amount = 2;
+}
+
+message MsgWithdrawCollateral {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "collateral/MsgWithdrawCollateral";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 2;
+}
+
+message MsgWithdrawCollateralResponse {
+  string withdrawn_amount = 1;
+  string collateral_ratio = 2;
+}
+
+message MsgMintStablecoin {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "collateral/MsgMintStablecoin";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 2;
+}
+
+message MsgMintStablecoinResponse {
+  string minted_amount = 1;
+  string collateral_ratio = 2;
+}
+
+message MsgRepayDebt {
+  option (cosmos.msg.v1.signer) = "creator";
+  option (amino.name) = "collateral/MsgRepayDebt";
+
+  string creator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string amount = 2;
+}
+
+message MsgRepayDebtResponse {
+  string remaining_debt = 1;
+  string collateral_ratio = 2;
+}
+
+message MsgLiquidatePosition {
+  option (cosmos.msg.v1.signer) = "liquidator";
+  option (amino.name) = "collateral/MsgLiquidatePosition";
+
+  string liquidator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string owner = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+message MsgLiquidatePositionResponse {
+  string collateral_seized = 1;
+  string debt_repaid = 2;
+  string penalty = 3;
+}
+
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "vesperinterchain/x/collateral/MsgUpdateParams";
+  option (amino.name) = "collateral/x/collateral/MsgUpdateParams";
 
-  // authority is the address that controls the module (defaults to x/gov unless overwritten).
   string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
-
-  // params defines the module parameters to update.
-  //
-  // NOTE: All parameters must be supplied.
   Params params = 2 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
 }
 
-// MsgUpdateParamsResponse defines the response structure for executing a
-// MsgUpdateParams message.
 message MsgUpdateParamsResponse {}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package vesperinterchain.collateral.v1;
+
+option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types";
+
+// Position represents a user's collateral position
+message Position {
+  string owner = 1;              // User address
+  string collateral_denom = 2;   // e.g., "uatom"
+  string collateral_amount = 3;  // Amount locked
+  string debt_amount = 4;        // uvUSD debt
+  int64 created_at = 5;          // Creation timestamp
+  int64 updated_at = 6;          // Last update timestamp
+}

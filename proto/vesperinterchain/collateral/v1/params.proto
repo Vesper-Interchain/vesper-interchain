@@ -10,4 +10,25 @@ option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/collateral
 message Params {
   option (amino.name) = "vesperinterchain/x/collateral/Params";
   option (gogoproto.equal) = true;
+
+  // liquidation_ratio is the minimum collateral ratio (e.g., 1.5 = 150%)
+  string liquidation_ratio = 1;
+
+  // liquidation_penalty is the penalty for liquidators (e.g., 0.05 = 5%)
+  string liquidation_penalty = 2;
+
+  // min_collateral_amount is the minimum deposit amount
+  string min_collateral_amount = 3;
+
+  // supported_collateral_denom is the only collateral accepted
+  string supported_collateral_denom = 4;
+
+  // max_loan_to_value is the maximum mintable vs collateral value (e.g., 0.8 = 80%)
+  string max_loan_to_value = 5;
+
+  // min_debt_amount is the minimum debt amount (prevents dust)
+  string min_debt_amount = 6;
+
+  // oracle_price_stale_seconds is the max age of oracle price
+  int64 oracle_price_stale_seconds = 7;
 }

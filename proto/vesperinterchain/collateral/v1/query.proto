@@ -1,30 +1,46 @@
 syntax = "proto3";
 package vesperinterchain.collateral.v1;
 
-import "amino/amino.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
-import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
+import "vesperinterchain/collateral/v1/position.proto";
 import "vesperinterchain/collateral/v1/params.proto";
 
 option go_package = "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types";
 
-// Query defines the gRPC querier service.
 service Query {
-  // Parameters queries the parameters of the module.
+  rpc Position(QueryPositionRequest) returns (QueryPositionResponse) {
+    option (google.api.http).get = "/vesperinterchain/collateral/v1/position/{owner}";
+  }
+
+  rpc CollateralRatio(QueryCollateralRatioRequest) returns (QueryCollateralRatioResponse) {
+    option (google.api.http).get = "/vesperinterchain/collateral/v1/collateral_ratio/{owner}";
+  }
+
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/Vesper-Interchain/vesper-interchain/collateral/v1/params";
+    option (google.api.http).get = "/vesperinterchain/collateral/v1/params";
   }
 }
 
-// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryPositionRequest {
+  string owner = 1;
+}
+
+message QueryPositionResponse {
+  Position position = 1;
+}
+
+message QueryCollateralRatioRequest {
+  string owner = 1;
+}
+
+message QueryCollateralRatioResponse {
+  string collateral_ratio = 1;
+  string collateral_value_usd = 2;
+  string debt_value_usd = 3;
+}
+
 message QueryParamsRequest {}
 
-// QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
-  // params holds all the parameters of this module.
-  Params params = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
+  Params params = 1;
 }
