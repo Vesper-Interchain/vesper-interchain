@@ -42,7 +42,7 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
 		weightMsgExecuteLiquidation,
-		liquidationsimulation.SimulateMsgExecuteLiquidation(am.authKeeper, am.bankKeeper, am.keeper, simState.TxConfig),
+		liquidationsimulation.SimulateMsgExecuteLiquidation(nil, nil, am.keeper, simState.TxConfig),
 	))
 
 	return operations

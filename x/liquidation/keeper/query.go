@@ -12,6 +12,12 @@ func NewQueryServerImpl(k Keeper) types.QueryServer {
 	return queryServer{k}
 }
 
+// NewQueryServer returns an implementation of the QueryServer interface
+// for the provided Keeper.
+func NewQueryServer(k Keeper) types.QueryServer {
+	return queryServer{k}
+}
+
 type queryServer struct {
 	k Keeper
 }
