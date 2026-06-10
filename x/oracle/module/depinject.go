@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/depinject/appconfig"
 	"github.com/cosmos/cosmos-sdk/codec"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	"github.com/Vesper-Interchain/vesper-interchain/x/oracle/keeper"
@@ -15,7 +16,6 @@ import (
 
 var _ depinject.OnePerModuleType = AppModule{}
 
-// IsOnePerModuleType implements the depinject.OnePerModuleType interface.
 func (AppModule) IsOnePerModuleType() {}
 
 func init() {
@@ -34,7 +34,7 @@ type ModuleInputs struct {
 	AddressCodec address.Codec
 
 	AuthKeeper types.AuthKeeper
-	BankKeeper types.BankKeeper
+	BankKeeper bankkeeper.Keeper
 }
 
 type ModuleOutputs struct {
@@ -45,7 +45,6 @@ type ModuleOutputs struct {
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
-	// default to governance authority if not provided
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 	if in.Config.Authority != "" {
 		authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)

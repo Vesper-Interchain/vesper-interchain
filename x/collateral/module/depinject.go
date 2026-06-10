@@ -15,7 +15,6 @@ import (
 
 var _ depinject.OnePerModuleType = AppModule{}
 
-// IsOnePerModuleType implements the depinject.OnePerModuleType interface.
 func (AppModule) IsOnePerModuleType() {}
 
 func init() {
@@ -33,9 +32,9 @@ type ModuleInputs struct {
 	Cdc          codec.Codec
 	AddressCodec address.Codec
 
-	AuthKeeper    types.AuthKeeper
-	BankKeeper    types.BankKeeper
-	StakingKeeper types.StakingKeeper
+	BankKeeper       types.BankKeeper
+	OracleKeeper     types.OracleKeeper
+	StablecoinKeeper types.StablecoinKeeper
 }
 
 type ModuleOutputs struct {
@@ -46,7 +45,6 @@ type ModuleOutputs struct {
 }
 
 func ProvideModule(in ModuleInputs) ModuleOutputs {
-	// default to governance authority if not provided
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 	if in.Config.Authority != "" {
 		authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
@@ -57,9 +55,10 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.AddressCodec,
 		authority,
 		in.BankKeeper,
-		in.StakingKeeper,
+		in.OracleKeeper,
+		in.StablecoinKeeper,
 	)
-	m := NewAppModule(in.Cdc, k, in.AuthKeeper, in.BankKeeper)
+	m := NewAppModule(in.Cdc, k)
 
 	return ModuleOutputs{CollateralKeeper: k, Module: m}
 }
