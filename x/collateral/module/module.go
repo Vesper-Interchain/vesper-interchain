@@ -30,23 +30,17 @@ var (
 
 // AppModule implements the AppModule interface that defines the inter-dependent methods that modules need to implement
 type AppModule struct {
-	cdc        codec.Codec
-	keeper     keeper.Keeper
-	authKeeper types.AuthKeeper
-	bankKeeper types.BankKeeper
+	cdc    codec.Codec
+	keeper keeper.Keeper
 }
 
 func NewAppModule(
 	cdc codec.Codec,
 	keeper keeper.Keeper,
-	authKeeper types.AuthKeeper,
-	bankKeeper types.BankKeeper,
 ) AppModule {
 	return AppModule{
-		cdc:        cdc,
-		keeper:     keeper,
-		authKeeper: authKeeper,
-		bankKeeper: bankKeeper,
+		cdc:    cdc,
+		keeper: keeper,
 	}
 }
 
@@ -75,8 +69,8 @@ func (AppModule) RegisterInterfaces(registrar codectypes.InterfaceRegistry) {
 
 // RegisterServices registers a gRPC query service to respond to the module-specific gRPC queries
 func (am AppModule) RegisterServices(registrar grpc.ServiceRegistrar) error {
-	types.RegisterMsgServer(registrar, keeper.NewMsgServerImpl(am.keeper))
-	types.RegisterQueryServer(registrar, keeper.NewQueryServerImpl(am.keeper))
+	types.RegisterMsgServer(registrar, keeper.NewMsgServer(am.keeper))
+	types.RegisterQueryServer(registrar, keeper.NewQueryServer(am.keeper))
 
 	return nil
 }
@@ -105,17 +99,12 @@ func (am AppModule) InitGenesis(ctx sdk.Context, _ codec.JSONCodec, gs json.RawM
 		panic(fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err))
 	}
 
-	if err := am.keeper.InitGenesis(ctx, genState); err != nil {
-		panic(fmt.Errorf("failed to initialize %s genesis state: %w", types.ModuleName, err))
-	}
+	am.keeper.InitGenesis(ctx, genState)
 }
 
 // ExportGenesis returns the module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, _ codec.JSONCodec) json.RawMessage {
-	genState, err := am.keeper.ExportGenesis(ctx)
-	if err != nil {
-		panic(fmt.Errorf("failed to export %s genesis state: %w", types.ModuleName, err))
-	}
+	genState := am.keeper.ExportGenesis(ctx)
 
 	bz, err := am.cdc.MarshalJSON(genState)
 	if err != nil {
