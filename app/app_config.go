@@ -38,6 +38,7 @@ import (
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	_ "github.com/Vesper-Interchain/vesper-interchain/x/collateral/module"
 	collateralmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types"
+	_ "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/module"  // 👈 ADD THIS
 	liquidationmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/types"
 	_ "github.com/Vesper-Interchain/vesper-interchain/x/oracle/module"
 	oraclemoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/oracle/types"
