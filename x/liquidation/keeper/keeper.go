@@ -24,6 +24,7 @@ type Keeper struct {
 
 	collateralKeeper types.CollateralKeeper
 	oracleKeeper     types.OracleKeeper
+	stablecoinKeeper types.StablecoinKeeper
 	bankKeeper       types.BankKeeper
 }
 
@@ -35,6 +36,7 @@ func NewKeeper(
 
 	collateralKeeper types.CollateralKeeper,
 	oracleKeeper types.OracleKeeper,
+	stablecoinKeeper types.StablecoinKeeper,
 	bankKeeper types.BankKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
@@ -51,6 +53,7 @@ func NewKeeper(
 
 		collateralKeeper: collateralKeeper,
 		oracleKeeper:     oracleKeeper,
+		stablecoinKeeper: stablecoinKeeper,
 		bankKeeper:       bankKeeper,
 		Params:           collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 	}
