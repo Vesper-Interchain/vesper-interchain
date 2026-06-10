@@ -11,6 +11,6 @@ message Params {
   option (amino.name) = "vesperinterchain/x/oracle/Params";
   option (gogoproto.equal) = true;
 
-  // oracle_address is the address of the oracle module account which can update the prices 
+  // oracle_address is the address of the oracle module account which can update the prices
   string oracle_address = 1;
 }

@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // MintStablecoin creates new stablecoin tokens and sends them to the recipient

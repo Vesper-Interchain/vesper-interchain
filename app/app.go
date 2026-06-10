@@ -58,6 +58,7 @@ import (
 	"github.com/spf13/cast"
 
 	"github.com/Vesper-Interchain/vesper-interchain/docs"
+	collateralmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/collateral/keeper"
 	liquidationmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/keeper"
 	oraclemodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/oracle/keeper"
 	stablecoinmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/keeper"
@@ -128,6 +129,7 @@ type App struct {
 	OracleKeeper           oraclemodulekeeper.Keeper
 	LiquidationKeeper      liquidationmodulekeeper.Keeper
 	StablecoinKeeper       stablecoinmodulekeeper.Keeper
+	CollateralKeeper       collateralmodulekeeper.Keeper
 }
 
 func init() {
@@ -215,6 +217,7 @@ func New(
 		&app.OracleKeeper,
 		&app.LiquidationKeeper,
 		&app.StablecoinKeeper,
+		&app.CollateralKeeper,
 	); err != nil {
 		panic(err)
 	}

@@ -8,7 +8,7 @@ import (
 	corestore "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"github.com/Vesper-Interchain/vesper-interchain/x/oracle/types"
+	"github.com/Vesper-Interchain/vesper-interchain/x/collateral/types"
 )
 
 type Keeper struct {
@@ -21,9 +21,9 @@ type Keeper struct {
 
 	Schema collections.Schema
 	Params collections.Item[types.Params]
-	Prices collections.Map[string, types.Price]
 
-	bankKeeper types.BankKeeper
+	bankKeeper    types.BankKeeper
+	stakingKeeper types.StakingKeeper
 }
 
 func NewKeeper(
@@ -33,6 +33,7 @@ func NewKeeper(
 	authority []byte,
 
 	bankKeeper types.BankKeeper,
+	stakingKeeper types.StakingKeeper,
 ) Keeper {
 	if _, err := addressCodec.BytesToString(authority); err != nil {
 		panic(fmt.Sprintf("invalid authority address %s: %s", authority, err))
@@ -46,22 +47,9 @@ func NewKeeper(
 		addressCodec: addressCodec,
 		authority:    authority,
 
-		bankKeeper: bankKeeper,
-
-		Params: collections.NewItem(
-			sb,
-			types.ParamsKey,
-			"params",
-			codec.CollValue[types.Params](cdc),
-		),
-
-		Prices: collections.NewMap(
-			sb,
-			types.PriceKey,
-			"prices",
-			collections.StringKey,
-			codec.CollValue[types.Price](cdc),
-		),
+		bankKeeper:    bankKeeper,
+		stakingKeeper: stakingKeeper,
+		Params:        collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 	}
 
 	schema, err := sb.Build()
