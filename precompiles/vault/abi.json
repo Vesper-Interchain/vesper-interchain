@@ -1,0 +1,140 @@
+[
+  {
+    "type": "function",
+    "name": "depositCollateral",
+    "inputs": [
+      {"name": "amount", "type": "uint256"}
+    ],
+    "outputs": [
+      {"name": "collateralAmount", "type": "uint256"}
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "withdrawCollateral",
+    "inputs": [
+      {"name": "amount", "type": "uint256"}
+    ],
+    "outputs": [
+      {"name": "collateralRatio", "type": "uint256"}
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "mintStablecoin",
+    "inputs": [
+      {"name": "amount", "type": "uint256"}
+    ],
+    "outputs": [
+      {"name": "mintedAmount", "type": "uint256"},
+      {"name": "collateralRatio", "type": "uint256"}
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "repayDebt",
+    "inputs": [
+      {"name": "amount", "type": "uint256"}
+    ],
+    "outputs": [
+      {"name": "remainingDebt", "type": "uint256"},
+      {"name": "collateralRatio", "type": "uint256"}
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "liquidatePosition",
+    "inputs": [
+      {"name": "owner", "type": "address"}
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "claimRewards",
+    "inputs": [],
+    "outputs": [
+      {"name": "claimed", "type": "uint256"}
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getPosition",
+    "inputs": [
+      {"name": "owner", "type": "address"}
+    ],
+    "outputs": [
+      {"name": "collateralAmount", "type": "uint256"},
+      {"name": "debtAmount",       "type": "uint256"},
+      {"name": "collateralRatio",  "type": "uint256"}
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPendingRewards",
+    "inputs": [
+      {"name": "owner", "type": "address"}
+    ],
+    "outputs": [
+      {"name": "pendingRewards", "type": "uint256"}
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "DepositCollateral",
+    "inputs": [
+      {"name": "owner",  "type": "address", "indexed": true},
+      {"name": "amount", "type": "uint256", "indexed": false}
+    ]
+  },
+  {
+    "type": "event",
+    "name": "WithdrawCollateral",
+    "inputs": [
+      {"name": "owner",  "type": "address", "indexed": true},
+      {"name": "amount", "type": "uint256", "indexed": false}
+    ]
+  },
+  {
+    "type": "event",
+    "name": "MintStablecoin",
+    "inputs": [
+      {"name": "owner",           "type": "address", "indexed": true},
+      {"name": "amount",          "type": "uint256", "indexed": false},
+      {"name": "collateralRatio", "type": "uint256", "indexed": false}
+    ]
+  },
+  {
+    "type": "event",
+    "name": "RepayDebt",
+    "inputs": [
+      {"name": "owner",         "type": "address", "indexed": true},
+      {"name": "amount",        "type": "uint256", "indexed": false},
+      {"name": "remainingDebt", "type": "uint256", "indexed": false}
+    ]
+  },
+  {
+    "type": "event",
+    "name": "LiquidatePosition",
+    "inputs": [
+      {"name": "owner",      "type": "address", "indexed": true},
+      {"name": "liquidator", "type": "address", "indexed": true}
+    ]
+  },
+  {
+    "type": "event",
+    "name": "ClaimRewards",
+    "inputs": [
+      {"name": "owner",  "type": "address", "indexed": true},
+      {"name": "amount", "type": "uint256", "indexed": false}
+    ]
+  }
+]

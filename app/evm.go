@@ -29,6 +29,8 @@ import (
 	evmmempool "github.com/cosmos/evm/mempool"
 	"github.com/cosmos/evm/precompiles/bech32"
 	"github.com/cosmos/evm/precompiles/p256"
+
+	"github.com/Vesper-Interchain/vesper-interchain/precompiles/vault"
 	srvflags "github.com/cosmos/evm/server/flags"
 	erc20 "github.com/cosmos/evm/x/erc20"
 	erc20keeper "github.com/cosmos/evm/x/erc20/keeper"
@@ -141,7 +143,12 @@ func (app *App) postRegisterEVMModules() error {
 	precompiles[bech32Precompile.Address()] = bech32Precompile
 	precompiles[p256Precompile.Address()] = p256Precompile
 
-	// add more stateful precompiles here, if needed.
+	// vault precompile — wraps x/collateral + x/rewards for EVM callers
+	vaultPrecompile, err := vault.NewPrecompile(app.CollateralKeeper, &app.RewardsKeeper, app.BankKeeper)
+	if err != nil {
+		return fmt.Errorf("failed to instantiate vault precompile: %w", err)
+	}
+	precompiles[vaultPrecompile.Address()] = vaultPrecompile
 
 	_ = app.EVMKeeper.WithStaticPrecompiles(precompiles)
 	return nil

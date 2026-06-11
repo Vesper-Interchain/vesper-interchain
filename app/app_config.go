@@ -38,10 +38,11 @@ import (
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	_ "github.com/Vesper-Interchain/vesper-interchain/x/collateral/module"
 	collateralmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/collateral/types"
-	_ "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/module"  // 👈 ADD THIS
+	_ "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/module"
 	liquidationmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/types"
 	_ "github.com/Vesper-Interchain/vesper-interchain/x/oracle/module"
 	oraclemoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/oracle/types"
+	rewardstypes "github.com/Vesper-Interchain/vesper-interchain/x/rewards/types"
 	_ "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/module"
 	stablecoinmoduletypes "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/types"
 	_ "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/module"
@@ -97,7 +98,12 @@ var (
 		{Account: evmtypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}}, {Account: erc20types.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
 		{Account: feemarkettypes.ModuleName},
 		// blocked account addresses
-		{Account: oraclemoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}}, {Account: liquidationmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}}, {Account: stablecoinmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}}, {Account: collateralmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}}}
+		{Account: oraclemoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: liquidationmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: stablecoinmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: collateralmoduletypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner, authtypes.Staking}},
+		{Account: rewardstypes.ModuleName, Permissions: []string{authtypes.Minter, authtypes.Burner}},
+	}
 	blockAccAddrs = []string{
 		authtypes.FeeCollectorName,
 		distrtypes.ModuleName,
@@ -143,7 +149,13 @@ var (
 						feegrant.ModuleName,
 						group.ModuleName,
 						// chain modules
-						vesperinterchainmoduletypes.ModuleName, oraclemoduletypes.ModuleName, liquidationmoduletypes.ModuleName, stablecoinmoduletypes.ModuleName, collateralmoduletypes.ModuleName},
+						vesperinterchainmoduletypes.ModuleName,
+						oraclemoduletypes.ModuleName,
+						liquidationmoduletypes.ModuleName,
+						stablecoinmoduletypes.ModuleName,
+						collateralmoduletypes.ModuleName,
+						rewardstypes.ModuleName,
+					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
 						{
@@ -178,7 +190,13 @@ var (
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
 						// chain modules
-						vesperinterchainmoduletypes.ModuleName, oraclemoduletypes.ModuleName, liquidationmoduletypes.ModuleName, stablecoinmoduletypes.ModuleName, collateralmoduletypes.ModuleName},
+						vesperinterchainmoduletypes.ModuleName,
+						oraclemoduletypes.ModuleName,
+						liquidationmoduletypes.ModuleName,
+						stablecoinmoduletypes.ModuleName,
+						collateralmoduletypes.ModuleName,
+						rewardstypes.ModuleName,
+					},
 				}),
 			},
 			{

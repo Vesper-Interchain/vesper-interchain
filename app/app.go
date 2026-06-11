@@ -61,6 +61,7 @@ import (
 	collateralmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/collateral/keeper"
 	liquidationmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/liquidation/keeper"
 	oraclemodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/oracle/keeper"
+	rewardsmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/rewards/keeper"
 	stablecoinmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/keeper"
 	vesperinterchainmodulekeeper "github.com/Vesper-Interchain/vesper-interchain/x/vesperinterchain/keeper"
 )
@@ -130,6 +131,7 @@ type App struct {
 	LiquidationKeeper      liquidationmodulekeeper.Keeper
 	StablecoinKeeper       stablecoinmodulekeeper.Keeper
 	CollateralKeeper       collateralmodulekeeper.Keeper
+	RewardsKeeper          rewardsmodulekeeper.Keeper
 }
 
 func init() {
@@ -237,6 +239,9 @@ func New(
 		panic(err)
 	}
 	if err := app.postRegisterEVMModules(); err != nil {
+		panic(err)
+	}
+	if err := app.registerRewardsModule(); err != nil {
 		panic(err)
 	}
 
