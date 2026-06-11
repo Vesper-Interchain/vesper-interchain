@@ -1,19 +1,32 @@
+// Package types contains all type definitions, constants, error codes, events,
+// and keeper interfaces for the liquidation module. The liquidation module
+// provides a queue-based liquidation pipeline: unhealthy positions are enqueued
+// by any account, and any account holding sufficient uvusd can execute them.
 package types
 
 import "cosmossdk.io/collections"
 
 const (
-	// ModuleName defines the module name
+	// ModuleName is the canonical name of the liquidation module.
 	ModuleName = "liquidation"
 
-	// StoreKey defines the primary module store key
+	// StoreKey is the KV-store key registered for the liquidation module.
 	StoreKey = ModuleName
 
-	// GovModuleName duplicates the gov module's name to avoid a dependency with x/gov.
-	// It should be synced with the gov module's name if it is ever changed.
-	// See: https://github.com/cosmos/cosmos-sdk/blob/v0.52.0-beta.2/x/gov/types/keys.go#L9
+	// GovModuleName is duplicated here to avoid importing x/gov directly.
+	// Must stay in sync with x/gov's own ModuleName constant.
 	GovModuleName = "gov"
 )
 
-// ParamsKey is the prefix to retrieve all Params
-var ParamsKey = collections.NewPrefix("p_liquidation")
+var (
+	// ParamsKey is the collections prefix for governance-controlled module parameters.
+	ParamsKey = collections.NewPrefix("p_liquidation")
+
+	// LiquidationQueuePrefix is the collections prefix for the pending liquidation queue
+	// map (uint64 position_id → LiquidationQueue entry).
+	LiquidationQueuePrefix = collections.NewPrefix("lq_")
+
+	// PositionCounterKey is the collections prefix for the monotonic position ID
+	// sequence. Each enqueued position receives a unique, never-reused uint64 ID.
+	PositionCounterKey = collections.NewPrefix("lq_seq")
+)
