@@ -11,32 +11,59 @@ import (
 	"github.com/Vesper-Interchain/vesper-interchain/x/liquidation/types"
 )
 
+// ExecuteLiquidation processes a MsgExecuteLiquidation transaction.
+// It reads the queued position, delegates the actual liquidation to LiquidatePosition,
+// and then removes the queue entry to prevent double-execution.
+//
+// The liquidator (msg.Creator) must hold enough uvusd in their wallet to cover
+// the full outstanding debt of the queued position at the time of execution.
 func (k msgServer) ExecuteLiquidation(goCtx context.Context, msg *types.MsgExecuteLiquidation) (*types.MsgExecuteLiquidationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	liquidator, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "invalid liquidator address")
 	}
 
-	// TODO: In a complete implementation with position IDs, we would:
-	// 1. Look up the position by position_id from a position registry
-	// 2. Get the owner from the position
-	// 3. Call LiquidatePosition(ctx, liquidator, owner)
-	// 
-	// For now, this is a placeholder that demonstrates the flow
-	_ = liquidator // TODO: Remove when position lookup is implemented
+	// Fetch the queue entry to obtain the owner address and verify the position exists.
+	entry, err := k.Keeper.GetQueueEntry(ctx, msg.PositionId)
+	if err != nil {
+		return nil, errorsmod.Wrapf(types.ErrPositionNotFound, "position_id %d not in queue", msg.PositionId)
+	}
+
+	owner, err := sdk.AccAddressFromBech32(entry.Owner)
+	if err != nil {
+		return nil, errorsmod.Wrap(err, "invalid owner address in queue entry")
+	}
+
+	// Delegate the full liquidation logic to LiquidatePosition which handles the
+	// health check, debt burn, collateral transfer, and position update/deletion.
+	if err := k.Keeper.LiquidatePosition(ctx, liquidator, owner); err != nil {
+		return nil, err
+	}
+
+	// Remove the entry from the queue so it cannot be executed again.
+	if err := k.Keeper.RemoveQueueEntry(ctx, msg.PositionId); err != nil {
+		return nil, err
+	}
 
 	return &types.MsgExecuteLiquidationResponse{}, nil
 }
 
-// LiquidatePosition handles liquidation of a specific position
-// This is called by the liquidation module to execute liquidations
+// LiquidatePosition executes the full liquidation of a position by the given liquidator.
+// It is called both by ExecuteLiquidation (queue-based path) and can be called directly
+// by the collateral module's direct-liquidation message handler.
+//
+// This function re-checks all preconditions (oracle freshness, position health) from
+// live state rather than relying on the queue snapshot, because conditions may have
+// changed between enqueue and execution (e.g. price recovery making the position healthy).
 func (k Keeper) LiquidatePosition(ctx sdk.Context, liquidator sdk.AccAddress, owner sdk.AccAddress) error {
 	collateralParams, err := k.collateralKeeper.GetParams(ctx)
 	if err != nil {
 		return err
 	}
 
-	// Check oracle price freshness
+	// Verify oracle price is fresh before any liquidation calculation.
 	if err := k.checkOraclePriceStale(ctx, collateralParams); err != nil {
 		return err
 	}
@@ -46,7 +73,7 @@ func (k Keeper) LiquidatePosition(ctx sdk.Context, liquidator sdk.AccAddress, ow
 		return err
 	}
 
-	// Verify position is unhealthy
+	// Re-check health from live state; the position may have recovered since it was queued.
 	isHealthy, err := k.collateralKeeper.IsPositionHealthy(ctx, position)
 	if err != nil {
 		return err
@@ -59,30 +86,25 @@ func (k Keeper) LiquidatePosition(ctx sdk.Context, liquidator sdk.AccAddress, ow
 		return types.ErrLiquidationFailed.Wrapf("position has no debt")
 	}
 
-	// Calculate liquidation outputs
+	// Compute the collateral to award and the debt the liquidator must repay.
 	collateralToGive, penaltyUSD, debtToRepayUVUSD, err := k.collateralKeeper.CalculateLiquidationOutput(ctx, position)
 	if err != nil {
 		return err
 	}
 
-	// Liquidator pays the debt
-	debtCoins := sdk.NewCoins(sdk.NewCoin("uvusd", debtToRepayUVUSD))
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, liquidator, colltypes.ModuleName, debtCoins); err != nil {
+	// Burn the debt from the liquidator's wallet. BurnStablecoin handles the
+	// send-to-module + burn in one step; no separate SendCoinsFromAccountToModule call.
+	if err := k.stablecoinKeeper.BurnStablecoin(ctx, liquidator, debtToRepayUVUSD); err != nil {
 		return fmt.Errorf("%w: %v", types.ErrInsufficientLiquidatorBalance, err)
 	}
 
-	// Burn the uvUSD
-	if err := k.stablecoinKeeper.BurnStablecoin(ctx, liquidator, debtToRepayUVUSD); err != nil {
-		return err
-	}
-
-	// Send collateral to liquidator
+	// Release the seized collateral (plus penalty) to the liquidator.
 	collateralCoins := sdk.NewCoins(sdk.NewCoin(collateralParams.SupportedCollateralDenom, collateralToGive))
 	if err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, colltypes.ModuleName, liquidator, collateralCoins); err != nil {
 		return err
 	}
 
-	// Update position
+	// Recalculate remaining balances and update or delete the position.
 	remainingCollateral, _ := math.NewIntFromString(position.CollateralAmount)
 	newCollateral := remainingCollateral.Sub(collateralToGive)
 	newDebt, _ := math.NewIntFromString(position.DebtAmount)
@@ -115,7 +137,8 @@ func (k Keeper) LiquidatePosition(ctx sdk.Context, liquidator sdk.AccAddress, ow
 	return nil
 }
 
-// checkOraclePriceStale checks if oracle price is stale
+// checkOraclePriceStale is a helper that reads the oracle staleness window from
+// collateral params and delegates the stale check to the oracle keeper.
 func (k Keeper) checkOraclePriceStale(ctx sdk.Context, params colltypes.Params) error {
 	stale, err := k.oracleKeeper.IsPriceStale(ctx, params.SupportedCollateralDenom, params.OraclePriceStaleSeconds)
 	if err != nil {
