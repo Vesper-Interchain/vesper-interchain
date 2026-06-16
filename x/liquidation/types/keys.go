@@ -26,7 +26,14 @@ var (
 	// map (uint64 position_id → LiquidationQueue entry).
 	LiquidationQueuePrefix = collections.NewPrefix("lq_")
 
-	// PositionCounterKey is the collections prefix for the monotonic position ID
-	// sequence. Each enqueued position receives a unique, never-reused uint64 ID.
-	PositionCounterKey = collections.NewPrefix("lq_seq")
+	/*
+	@fix: PositionCounterKey prefix changed from "lq_seq" to "pc_".
+	      The previous value "lq_seq" starts with "lq_" which is also the prefix of
+	      LiquidationQueuePrefix ("lq_"). cosmossdk.io/collections uses byte-prefix
+	      iteration to scan a collection; a sequence key whose bytes are a prefix of
+	      queue entries (or vice-versa) causes the iterator to walk into the wrong
+	      collection, silently returning wrong data or corrupting both.
+	      "pc_" (position counter) is entirely disjoint from "lq_" so there is no overlap.
+	*/
+	PositionCounterKey = collections.NewPrefix("pc_")
 )

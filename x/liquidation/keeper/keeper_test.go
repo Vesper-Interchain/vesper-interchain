@@ -36,14 +36,20 @@ func initFixture(t *testing.T) *fixture {
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
+	/*
+	@fix: Added fourth nil argument to keeper.NewKeeper to match the updated constructor
+	      signature after BankKeeper was added as a separate parameter. In unit tests all
+	      external keepers are nil since this test only exercises param storage and KV logic.
+	*/
 	k := keeper.NewKeeper(
 		storeService,
 		encCfg.Codec,
 		addressCodec,
 		authority,
-		nil,
-		nil,
-		nil,
+		nil, // CollateralKeeper — not needed for unit tests
+		nil, // OracleKeeper — not needed for unit tests
+		nil, // StablecoinKeeper — not needed for unit tests
+		nil, // BankKeeper — added when liquidation payout logic was wired in
 	)
 
 	// Initialize params

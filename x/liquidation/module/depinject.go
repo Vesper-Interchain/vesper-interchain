@@ -11,6 +11,18 @@ import (
 
 	"github.com/Vesper-Interchain/vesper-interchain/x/liquidation/keeper"
 	"github.com/Vesper-Interchain/vesper-interchain/x/liquidation/types"
+	/*
+	@desc: Concrete keeper types imported for depinject field resolution.
+	@fix:  depinject resolves wire types by their exact Go type. Declaring
+	       CollateralKeeper / OracleKeeper / StablecoinKeeper as their interface types
+	       causes "no provider for type" at startup because depinject only knows the
+	       concrete types emitted by other modules' ProvideModule functions.
+	       Concrete types satisfy the interfaces declared in expected_keepers.go, so
+	       the keeper constructor still receives values through the interface contract.
+	*/
+	collateralkeeper "github.com/Vesper-Interchain/vesper-interchain/x/collateral/keeper"
+	oraclekeeper "github.com/Vesper-Interchain/vesper-interchain/x/oracle/keeper"
+	stablecoinkeeper "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/keeper"
 )
 
 var _ depinject.OnePerModuleType = AppModule{}
@@ -27,15 +39,18 @@ func init() {
 type ModuleInputs struct {
 	depinject.In
 
-	Config           *types.Module
-	StoreService     store.KVStoreService
-	Cdc              codec.Codec
-	AddressCodec     address.Codec
+	Config       *types.Module
+	StoreService store.KVStoreService
+	Cdc          codec.Codec
+	AddressCodec address.Codec
 
-	BankKeeper       types.BankKeeper
-	CollateralKeeper types.CollateralKeeper
-	OracleKeeper     types.OracleKeeper
-	StablecoinKeeper types.StablecoinKeeper
+	BankKeeper types.BankKeeper
+	// @desc: Concrete types — depinject matches by exact Go type, not by interface.
+	// The keeper constructor accepts the corresponding interfaces; Go's structural
+	// typing handles the implicit conversion.
+	CollateralKeeper collateralkeeper.Keeper
+	OracleKeeper     oraclekeeper.Keeper
+	StablecoinKeeper stablecoinkeeper.Keeper
 }
 
 type ModuleOutputs struct {

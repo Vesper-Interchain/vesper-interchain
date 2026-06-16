@@ -15,22 +15,36 @@ type AuthKeeper interface {
 	GetAccount(ctx context.Context, addr sdk.AccAddress) sdk.AccountI
 }
 
-// CollateralKeeper defines the expected collateral keeper interface
+/*
+@desc: CollateralKeeper defines the subset of collateral module keeper methods the
+       liquidation module calls during position inspection and liquidation execution.
+@fix:  All position-mutating methods use sdk.Context (not context.Context) to match
+       the collateral keeper's actual method signatures. Go interface satisfaction is
+       structural and exact — a mismatch in the context type causes a compile error
+       because sdk.Context and context.Context are distinct types (sdk.Context wraps it).
+       GetParams keeps context.Context since that method was authored with the standard
+       interface-friendly type.
+*/
 type CollateralKeeper interface {
-	GetPosition(ctx context.Context, owner string) (collateraltypes.Position, error)
-	SetPosition(ctx context.Context, position collateraltypes.Position) error
-	DeletePosition(ctx context.Context, owner string) error
-	GetCollateralValueUSD(ctx context.Context, amountStr string, denom string) (math.LegacyDec, error)
-	GetCollateralRatio(ctx context.Context, position collateraltypes.Position) (math.LegacyDec, error)
-	IsPositionHealthy(ctx context.Context, position collateraltypes.Position) (bool, error)
-	CalculateLiquidationOutput(ctx context.Context, position collateraltypes.Position) (collateralToGive math.Int, penaltyUSD math.LegacyDec, debtToRepayUVUSD math.Int, err error)
+	GetPosition(ctx sdk.Context, owner string) (collateraltypes.Position, error)
+	SetPosition(ctx sdk.Context, position collateraltypes.Position) error
+	DeletePosition(ctx sdk.Context, owner string) error
+	GetCollateralValueUSD(ctx sdk.Context, amountStr string, denom string) (math.LegacyDec, error)
+	GetCollateralRatio(ctx sdk.Context, position collateraltypes.Position) (math.LegacyDec, error)
+	IsPositionHealthy(ctx sdk.Context, position collateraltypes.Position) (bool, error)
+	CalculateLiquidationOutput(ctx sdk.Context, position collateraltypes.Position) (collateralToGive math.Int, penaltyUSD math.LegacyDec, debtToRepayUVUSD math.Int, err error)
 	GetParams(ctx context.Context) (collateraltypes.Params, error)
 }
 
-// OracleKeeper defines the expected oracle keeper interface
+/*
+@desc: OracleKeeper defines the price-lookup interface the liquidation module needs to
+       evaluate whether a collateral position has fallen below its liquidation ratio.
+@fix:  Methods use sdk.Context instead of context.Context to match oraclekeeper.Keeper's
+       actual signatures, enabling the concrete keeper to satisfy this interface.
+*/
 type OracleKeeper interface {
-	GetPriceValue(ctx context.Context, denom string) (math.LegacyDec, error)
-	IsPriceStale(ctx context.Context, denom string, maxAgeSeconds int64) (bool, error)
+	GetPriceValue(ctx sdk.Context, denom string) (math.LegacyDec, error)
+	IsPriceStale(ctx sdk.Context, denom string, maxAgeSeconds int64) (bool, error)
 }
 
 // StablecoinKeeper defines the expected stablecoin keeper interface
