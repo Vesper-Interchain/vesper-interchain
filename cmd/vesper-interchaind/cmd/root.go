@@ -15,6 +15,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtxconfig "github.com/cosmos/cosmos-sdk/x/auth/tx/config"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	evmcryptocodec "github.com/cosmos/evm/crypto/codec"
+	"github.com/cosmos/evm/crypto/ethsecp256k1"
 	cosmosevmkeyring "github.com/cosmos/evm/crypto/keyring"
 	ibctransferevm "github.com/cosmos/evm/x/ibc/transfer"
 	ibctransfer "github.com/cosmos/ibc-go/v10/modules/apps/transfer"
@@ -37,6 +39,7 @@ func NewRootCmd() *cobra.Command {
 			depinject.Supply(log.NewNopLogger()),
 			depinject.Provide(
 				ProvideClientContext,
+				ProvideCodecWithEVMCrypto,
 			), depinject.Provide(app.ProvideMsgEthereumTxCustomGetSigner),
 		),
 		&autoCliOpts,
@@ -104,6 +107,51 @@ func NewRootCmd() *cobra.Command {
 	return rootCmd
 }
 
+/*
+@desc: EVMCryptoConfig is a zero-size marker type used as a depinject dependency edge.
+       ProvideCodecWithEVMCrypto returns it; ProvideClientContext consumes it (via blank
+       parameter _). This forces depinject to sequence the EVM registration before the
+       client context is built — without this ordering guarantee, the keyring would be
+       constructed before ethsecp256k1 is known, causing "unsupported signing algo" errors.
+
+@desc: ProvideCodecWithEVMCrypto registers ethsecp256k1 in two places on the client side:
+       1. interfaceRegistry — so protobuf Any-unpacking of pubkeys works in CLI responses.
+       2. legacyAmino — so amino-JSON signing mode and offline tx building work correctly.
+       We do NOT call evmcryptocodec.RegisterCrypto here because it internally calls
+       cryptocodec.RegisterCrypto, which re-registers secp256k1/ed25519 that depinject
+       already wired, causing a "TypeInfo already exists" panic at startup.
+*/
+
+// EVMCryptoConfig is a marker type that indicates EVM crypto types have been registered
+type EVMCryptoConfig struct{}
+
+// ProvideCodecWithEVMCrypto registers EVM crypto types in the codec and returns a marker
+// This ensures the registration happens before the codec is used for the keyring
+func ProvideCodecWithEVMCrypto(
+	interfaceRegistry codectypes.InterfaceRegistry,
+	legacyAmino *codec.LegacyAmino,
+) EVMCryptoConfig {
+	// @desc: Register ethsecp256k1 in the interface registry for protobuf Any unpacking
+	evmcryptocodec.RegisterInterfaces(interfaceRegistry)
+
+	// @desc: Register ethsecp256k1 in legacy amino for amino-JSON sign mode and offline tx building
+	// @fix:  Must NOT call evmcryptocodec.RegisterCrypto — it re-registers standard SDK types → panic
+	legacyAmino.RegisterConcrete(&ethsecp256k1.PubKey{}, ethsecp256k1.PubKeyName, nil)
+	legacyAmino.RegisterConcrete(&ethsecp256k1.PrivKey{}, ethsecp256k1.PrivKeyName, nil)
+
+	return EVMCryptoConfig{}
+}
+
+/*
+@desc: ProvideClientContext builds the client.Context for all CLI commands.
+       WithKeyringOptions(cosmosevmkeyring.Option()) sets eth_secp256k1 as the default
+       keyring signing algorithm so that `keys add` without --algo still uses the
+       EVM-compatible key type.
+       The _ EVMCryptoConfig parameter is intentionally blank — it exists solely to
+       create a depinject dependency edge that forces ProvideCodecWithEVMCrypto to run
+       before this function, guaranteeing ethsecp256k1 is registered before the context
+       is handed to any command.
+*/
 // ProvideClientContext creates and provides a fully initialized client.Context,
 // allowing it to be used for dependency injection and CLI operations.
 func ProvideClientContext(
@@ -111,6 +159,7 @@ func ProvideClientContext(
 	interfaceRegistry codectypes.InterfaceRegistry,
 	txConfigOpts tx.ConfigOptions,
 	legacyAmino *codec.LegacyAmino,
+	_ EVMCryptoConfig, // @fix: force dependency edge — ensures EVM crypto is registered first
 ) client.Context {
 	clientCtx := client.Context{}.
 		WithCodec(appCodec).
