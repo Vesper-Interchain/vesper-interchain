@@ -9,9 +9,15 @@ import (
 	"github.com/Vesper-Interchain/vesper-interchain/x/collateral/types"
 )
 
+/*
+@fix: Renamed NewMsgServerImpl → NewMsgServer to match the updated keeper package export.
+@fix: Empty Params{} test case now expects an error with "liquidation_ratio cannot be empty"
+      because Params.Validate() was tightened — previously it accepted empty params, but
+      a collateral module with no liquidation ratio set is unsafe to deploy.
+*/
 func TestMsgUpdateParams(t *testing.T) {
 	f := initFixture(t)
-	ms := keeper.NewMsgServerImpl(f.keeper)
+	ms := keeper.NewMsgServer(f.keeper)
 
 	params := types.DefaultParams()
 	require.NoError(t, f.keeper.Params.Set(f.ctx, params))
@@ -36,12 +42,13 @@ func TestMsgUpdateParams(t *testing.T) {
 			expErrMsg: "invalid authority",
 		},
 		{
-			name: "send enabled param",
+			name: "invalid params - empty fields",
 			input: &types.MsgUpdateParams{
 				Authority: authorityStr,
 				Params:    types.Params{},
 			},
-			expErr: false,
+			expErr:    true,
+			expErrMsg: "liquidation_ratio cannot be empty",
 		},
 		{
 			name: "all good",

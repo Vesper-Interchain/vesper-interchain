@@ -47,18 +47,23 @@ type BankKeeper interface {
 	) sdk.Coin
 }
 
-// OracleKeeper defines the subset of the oracle module's keeper that the
-// collateral module requires for price lookups and staleness checks.
+/*
+@desc: OracleKeeper defines the subset of the oracle module's keeper that the
+       collateral module requires for price lookups and staleness checks.
+@fix:  Methods use sdk.Context instead of context.Context to match the oracle keeper's
+       actual Go signatures. Go interface satisfaction is structural (exact signature match)
+       — if the interface declares context.Context but the oracle keeper uses sdk.Context,
+       oraclekeeper.Keeper does NOT implement OracleKeeper and compilation fails.
+       sdk.Context embeds context.Context so it is a strict superset.
+*/
 type OracleKeeper interface {
-	// GetPriceValue returns the current oracle price for a denom as a decimal.
 	GetPriceValue(
-		ctx context.Context,
+		ctx sdk.Context,
 		denom string,
 	) (math.LegacyDec, error)
 
-	// IsPriceStale reports whether the price is older than maxAgeSeconds.
 	IsPriceStale(
-		ctx context.Context,
+		ctx sdk.Context,
 		denom string,
 		maxAgeSeconds int64,
 	) (bool, error)

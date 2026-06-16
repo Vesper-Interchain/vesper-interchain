@@ -19,9 +19,14 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
-			genState: &types.GenesisState{},
-			valid:    true,
+			// @fix: Empty GenesisState{} is no longer valid — Params.Validate() now rejects
+			// a zero-value Params struct because liquidation_ratio would be unset.
+			// Must supply DefaultParams() to produce a valid non-default genesis entry.
+			desc: "valid genesis state",
+			genState: &types.GenesisState{
+				Params: types.DefaultParams(),
+			},
+			valid: true,
 		},
 	}
 	for _, tc := range tests {

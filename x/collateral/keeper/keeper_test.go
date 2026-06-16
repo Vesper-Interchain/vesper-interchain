@@ -36,13 +36,20 @@ func initFixture(t *testing.T) *fixture {
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
+	/*
+	@fix: Added third nil argument to keeper.NewKeeper to match the updated constructor
+	      signature. A RewardsKeeper parameter was added to the keeper to support reward
+	      share propagation on deposit/withdrawal events. In unit tests, this is nil since
+	      rewards integration is not tested here.
+	*/
 	k := keeper.NewKeeper(
 		storeService,
 		encCfg.Codec,
 		addressCodec,
 		authority,
-		nil,
-		nil,
+		nil, // BankKeeper — not needed for unit tests
+		nil, // OracleKeeper — not needed for unit tests
+		nil, // RewardsKeeper — wired in app.go via SetRewardsKeeper after init
 	)
 
 	// Initialize params

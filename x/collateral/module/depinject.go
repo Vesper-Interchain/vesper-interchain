@@ -11,6 +11,17 @@ import (
 
 	"github.com/Vesper-Interchain/vesper-interchain/x/collateral/keeper"
 	"github.com/Vesper-Interchain/vesper-interchain/x/collateral/types"
+	/*
+	@desc: Import concrete keeper types instead of interface types for depinject injection.
+	@fix:  depinject resolves providers by their exact Go type, not by interface. Declaring
+	       fields as types.OracleKeeper / types.StablecoinKeeper (interfaces) causes depinject
+	       to fail with "no provider for type" because the container only knows the concrete
+	       oraclekeeper.Keeper and stablecoinkeeper.Keeper types that other modules export.
+	       Using concrete types lets depinject wire them correctly while the keeper constructor
+	       still accepts the interface — satisfying both depinject and the type system.
+	*/
+	oraclekeeper "github.com/Vesper-Interchain/vesper-interchain/x/oracle/keeper"
+	stablecoinkeeper "github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/keeper"
 )
 
 var _ depinject.OnePerModuleType = AppModule{}
@@ -32,9 +43,11 @@ type ModuleInputs struct {
 	Cdc          codec.Codec
 	AddressCodec address.Codec
 
-	BankKeeper       types.BankKeeper
-	OracleKeeper     types.OracleKeeper
-	StablecoinKeeper types.StablecoinKeeper
+	BankKeeper types.BankKeeper
+	// @desc: Concrete types — depinject matches providers by exact type, not by interface.
+	// The keeper constructor accepts the interface; depinject hands in the concrete value.
+	OracleKeeper     oraclekeeper.Keeper
+	StablecoinKeeper stablecoinkeeper.Keeper
 }
 
 type ModuleOutputs struct {
