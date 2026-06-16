@@ -6,6 +6,14 @@ import (
 	"github.com/Vesper-Interchain/vesper-interchain/x/stablecoin/types"
 )
 
+/*
+@fix: Removed MintStablecoin and BurnStablecoin from AutoCLI Tx route descriptors.
+      These messages are invoked only by the collateral keeper (not by end-users directly)
+      and their proto RPC definitions require a position context that the CLI cannot supply
+      as raw positional args. Exposing them in autocli would let anyone call them without
+      a valid position, bypassing collateral checks. The routes are removed until a proper
+      user-facing mint/burn flow (through the collateral module) is added.
+*/
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
 func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 	return &autocliv1.ModuleOptions{
@@ -26,18 +34,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "UpdateParams",
 					Skip:      true, // skipped because authority gated
-				},
-				{
-					RpcMethod:      "MintStablecoin",
-					Use:            "mint-stablecoin [position-id] [amount]",
-					Short:          "Send a mintStablecoin tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "position_id"}, {ProtoField: "amount"}},
-				},
-				{
-					RpcMethod:      "BurnStablecoin",
-					Use:            "burn-stablecoin [amount] [position-id]",
-					Short:          "Send a burnStablecoin tx",
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{{ProtoField: "amount"}, {ProtoField: "position_id"}},
 				},
 			},
 		},

@@ -19,9 +19,17 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
-			genState: &types.GenesisState{},
-			valid:    true,
+			// @fix: Empty GenesisState{} is no longer valid — Validate() now checks that
+			// TotalMinted and TotalBurned are parseable math.Int strings and that
+			// Params.StableDenom is non-empty. Must supply DefaultParams() and zero strings
+			// to form a valid genesis that isn't the exact DefaultGenesis() case.
+			desc: "valid genesis state",
+			genState: &types.GenesisState{
+				Params:      types.DefaultParams(),
+				TotalMinted: "0",
+				TotalBurned: "0",
+			},
+			valid: true,
 		},
 	}
 	for _, tc := range tests {

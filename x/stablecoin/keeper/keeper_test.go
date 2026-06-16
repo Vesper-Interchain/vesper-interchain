@@ -36,13 +36,19 @@ func initFixture(t *testing.T) *fixture {
 
 	authority := authtypes.NewModuleAddress(types.GovModuleName)
 
+	/*
+	@fix: Removed second nil argument from keeper.NewKeeper. The stablecoin keeper
+	      originally took a BankKeeper and an OracleKeeper; after refactoring mint/burn
+	      to use bank module directly through the module account, the oracle keeper
+	      parameter was removed from the constructor because price lookups are not needed
+	      for stablecoin issuance (the collateral module is responsible for that check).
+	*/
 	k := keeper.NewKeeper(
 		storeService,
 		encCfg.Codec,
 		addressCodec,
 		authority,
-		nil,
-		nil,
+		nil, // BankKeeper — not needed for unit tests
 	)
 
 	// Initialize params
