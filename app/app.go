@@ -19,6 +19,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -44,6 +45,8 @@ import (
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	evmante "github.com/cosmos/evm/ante"
+	evmcryptocodec "github.com/cosmos/evm/crypto/codec"
+	"github.com/cosmos/evm/crypto/ethsecp256k1"
 	evmmempool "github.com/cosmos/evm/mempool"
 	evmsrvflags "github.com/cosmos/evm/server/flags"
 	erc20keeper "github.com/cosmos/evm/x/erc20/keeper"
@@ -134,6 +137,19 @@ type App struct {
 	RewardsKeeper          rewardsmodulekeeper.Keeper
 }
 
+/*
+@desc: Package-level init registers chain-wide global configuration that must be
+       set once before any function is called. This runs before New() and before
+       any CLI command executes (since root.go imports this package).
+
+@fix: Registers ethsecp256k1 PubKey/PrivKey on legacy.Cdc — the global amino codec
+      initialized by the cosmos-sdk at startup. Without this, gas simulation panics
+      at x/auth/ante/basic.go:143 where ConsumeTxSizeGasDecorator calls
+      legacy.Cdc.MustMarshal(simSig) with an ethsecp256k1 pubkey in the StdSignature.
+      We register directly on legacy.Cdc instead of calling evmcryptocodec.RegisterCrypto
+      because RegisterCrypto re-registers secp256k1/ed25519, which are already present
+      in legacy.Cdc from the SDK's own init(), causing a "TypeInfo already exists" panic.
+*/
 func init() {
 	var err error
 	clienthelpers.EnvPrefix = Name
@@ -145,6 +161,13 @@ func init() {
 		new(big.Int).Exp(big.NewInt(10), big.NewInt(BaseDenomUnit), nil),
 	)
 
+	// @fix: Register ethsecp256k1 on the global legacy amino codec.
+	// ConsumeTxSizeGasDecorator (x/auth/ante/basic.go:143) calls
+	// legacy.Cdc.MustMarshal(simSig) during gas simulation, where simSig
+	// contains the account pubkey. Without this, amino panics with
+	// "cannot encode unregistered concrete type ethsecp256k1.PubKey".
+	legacy.Cdc.RegisterConcrete(&ethsecp256k1.PubKey{}, ethsecp256k1.PubKeyName, nil)
+	legacy.Cdc.RegisterConcrete(&ethsecp256k1.PrivKey{}, ethsecp256k1.PrivKeyName, nil)
 }
 
 // AppConfig returns the default app config.
@@ -223,6 +246,21 @@ func New(
 	); err != nil {
 		panic(err)
 	}
+
+	/*
+	@desc: Register ethsecp256k1 in the protobuf InterfaceRegistry so that Any-packed
+	       pubkeys are recognized during tx decoding and gRPC responses.
+	@fix:  Register on app.legacyAmino (the depinject-provided amino instance) for
+	       amino-JSON signing, REST amino encoding, and simulation paths that go
+	       through app.legacyAmino rather than the global legacy.Cdc.
+	       We call RegisterInterfaces + RegisterConcrete individually instead of
+	       evmcryptocodec.RegisterCrypto because RegisterCrypto also calls
+	       cryptocodec.RegisterCrypto which re-registers secp256k1/ed25519 that
+	       depinject already placed in this codec, triggering "TypeInfo already exists".
+	*/
+	evmcryptocodec.RegisterInterfaces(app.interfaceRegistry)
+	app.legacyAmino.RegisterConcrete(&ethsecp256k1.PubKey{}, ethsecp256k1.PubKeyName, nil)
+	app.legacyAmino.RegisterConcrete(&ethsecp256k1.PrivKey{}, ethsecp256k1.PrivKeyName, nil)
 
 	// add to default baseapp options
 	// enable optimistic execution
