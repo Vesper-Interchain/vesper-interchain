@@ -130,6 +130,21 @@ var (
 					// During begin block slashing happens after distr.BeginBlocker so that
 					// there is nothing left over in the validator fee pool, so as to keep the
 					// CanWithdrawInvariant invariant.
+					/*
+					@desc: Module ordering for BeginBlockers, EndBlockers, and InitGenesis controls
+					       execution sequence at each block boundary and at chain start.
+
+					@fix: Added feemarket, evm, and erc20 to BeginBlockers, EndBlockers, and
+					      InitGenesis. These EVM modules were missing from the ordering list, which
+					      caused their hooks to never fire and their genesis state to never load.
+					      EVM modules are placed after IBC and before custom chain modules.
+					      feemarket must come before evm (base fee must exist before tx execution).
+
+					@fix: Moved genutiltypes.ModuleName to the end of InitGenesis, after staking.
+					      genutil's InitChainer validates and applies gentxs which include staking
+					      delegation messages — staking must be initialized first or the gentx
+					      delegation has no validator to bond to, causing InitGenesis to panic.
+					*/
 					// NOTE: staking module is required if HistoricalEntries param > 0
 					BeginBlockers: []string{
 						minttypes.ModuleName,
@@ -141,6 +156,10 @@ var (
 						epochstypes.ModuleName,
 						// ibc modules
 						ibcexported.ModuleName,
+						// evm modules
+						feemarkettypes.ModuleName,
+						evmtypes.ModuleName,
+						erc20types.ModuleName,
 						// chain modules
 						vesperinterchainmoduletypes.ModuleName, oraclemoduletypes.ModuleName, liquidationmoduletypes.ModuleName, stablecoinmoduletypes.ModuleName, collateralmoduletypes.ModuleName},
 					EndBlockers: []string{
@@ -148,6 +167,10 @@ var (
 						stakingtypes.ModuleName,
 						feegrant.ModuleName,
 						group.ModuleName,
+						// evm modules
+						feemarkettypes.ModuleName,
+						evmtypes.ModuleName,
+						erc20types.ModuleName,
 						// chain modules
 						vesperinterchainmoduletypes.ModuleName,
 						oraclemoduletypes.ModuleName,
@@ -189,6 +212,10 @@ var (
 						ibcexported.ModuleName,
 						ibctransfertypes.ModuleName,
 						icatypes.ModuleName,
+						// evm modules - must come after bank and auth
+						feemarkettypes.ModuleName,
+						evmtypes.ModuleName,
+						erc20types.ModuleName,
 						// chain modules
 						vesperinterchainmoduletypes.ModuleName,
 						oraclemoduletypes.ModuleName,
@@ -196,6 +223,8 @@ var (
 						stablecoinmoduletypes.ModuleName,
 						collateralmoduletypes.ModuleName,
 						rewardstypes.ModuleName,
+						// genutil must come after staking
+						genutiltypes.ModuleName,
 					},
 				}),
 			},
