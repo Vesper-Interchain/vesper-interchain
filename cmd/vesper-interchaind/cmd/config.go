@@ -39,8 +39,11 @@ func initAppConfig() (string, interface{}) {
 	// - if you set srvCfg.MinGasPrices non-empty, validators CAN tweak their
 	//   own app.toml to override, or use this default value.
 	//
-	// In tests, we set the min gas prices to 0.
-	// srvCfg.MinGasPrices = "0stake"
+	// Set a default so the node can start without manual app.toml edits.
+	// Validators can override this in their own app.toml.
+	// "0stake" lets the feemarket module govern dynamic fees while satisfying
+	// the SDK's requirement that MinGasPrices is non-empty.
+	srvCfg.MinGasPrices = "0stake"
 
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
