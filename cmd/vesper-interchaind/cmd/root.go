@@ -76,7 +76,20 @@ func NewRootCmd() *cobra.Command {
 			customAppTemplate, customAppConfig := initAppConfig()
 			customCMTConfig := initCometBFTConfig()
 
-			return server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, customCMTConfig)
+			if err := server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, customCMTConfig); err != nil {
+				return err
+			}
+
+			// cosmos-sdk's interceptConfigs calls rootViper.Unmarshal(&customConfig) typed as `any`,
+			// causing viper/mapstructure to replace the struct with a bare map — MinGasPrices is
+			// lost and app.toml gets minimum-gas-prices = "". This fallback covers both existing
+			// nodes with broken app.toml and edge cases where the template fix doesn't apply.
+			serverCtx := server.GetServerContextFromCmd(cmd)
+			if serverCtx.Viper.GetString(server.FlagMinGasPrices) == "" {
+				serverCtx.Viper.Set(server.FlagMinGasPrices, "0stake")
+			}
+
+			return nil
 		},
 	}
 

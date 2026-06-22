@@ -54,8 +54,8 @@ all: install
 install:
 	@echo "--> ensure dependencies have not been modified"
 	@go mod verify
-	@echo "--> installing $(APPNAME)d"
-	@go install $(BUILD_FLAGS) -mod=readonly ./cmd/$(APPNAME)d
+	@echo "--> installing vesper-interchaind"
+	@go install $(BUILD_FLAGS) -mod=readonly ./cmd/vesper-interchaind
 
 .PHONY: all install
 

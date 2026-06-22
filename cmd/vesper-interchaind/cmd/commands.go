@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"io"
+	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -28,13 +31,60 @@ import (
 	"github.com/Vesper-Interchain/vesper-interchain/app"
 )
 
+// patchGenesisFeemarketNoBaseFee sets feemarket.params.no_base_fee = true in the
+// written genesis.json so that the EVM dynamic fee checker falls back to the
+// standard minimum-gas-prices check for native Cosmos txs. Without this, the
+// NewMinGasPriceDecorator and NewDynamicFeeChecker ante decorators require fees
+// in the EVM denom (atest) even for bank/staking txs, making the chain unusable
+// without a cross-denom price oracle.
+func patchGenesisFeemarketNoBaseFee(cmd *cobra.Command, _ []string) error {
+	homeDir, _ := cmd.Flags().GetString(flags.FlagHome)
+	if homeDir == "" {
+		homeDir = app.DefaultNodeHome
+	}
+
+	genesisPath := filepath.Join(homeDir, "config", "genesis.json")
+	bz, err := os.ReadFile(genesisPath)
+	if err != nil {
+		return err
+	}
+
+	var genesis map[string]interface{}
+	if err := json.Unmarshal(bz, &genesis); err != nil {
+		return err
+	}
+
+	appState, ok := genesis["app_state"].(map[string]interface{})
+	if !ok {
+		return nil
+	}
+	feemarket, ok := appState["feemarket"].(map[string]interface{})
+	if !ok {
+		return nil
+	}
+	params, ok := feemarket["params"].(map[string]interface{})
+	if !ok {
+		return nil
+	}
+	params["no_base_fee"] = true
+
+	patched, err := json.MarshalIndent(genesis, "", " ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(genesisPath, patched, 0o644)
+}
+
 func initRootCmd(
 	rootCmd *cobra.Command,
 	txConfig client.TxConfig,
 	basicManager module.BasicManager,
 ) {
+	initCmd := genutilcli.InitCmd(basicManager, app.DefaultNodeHome)
+	initCmd.PostRunE = patchGenesisFeemarketNoBaseFee
+
 	rootCmd.AddCommand(
-		genutilcli.InitCmd(basicManager, app.DefaultNodeHome),
+		initCmd,
 		NewInPlaceTestnetCmd(),
 		NewTestnetMultiNodeCmd(basicManager, banktypes.GenesisBalancesIterator{}),
 		debug.Cmd(),
