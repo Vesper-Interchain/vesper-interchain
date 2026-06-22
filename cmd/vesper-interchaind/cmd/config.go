@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"strings"
+
 	cmtcfg "github.com/cometbft/cometbft/config"
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
 )
@@ -49,16 +51,17 @@ func initAppConfig() (string, interface{}) {
 		Config: *srvCfg,
 	}
 
-	customAppTemplate := serverconfig.DefaultConfigTemplate
-	// Edit the default template file
-	//
-	// customAppTemplate := serverconfig.DefaultConfigTemplate + `
-	// [wasm]
-	// # This is the maximum sdk gas (wasm and storage) that we allow for any x/wasm "smart" queries
-	// query_gas_limit = 300000
-	// # This is the number of wasm vm instances we keep cached in memory for speed-up
-	// # Warning: this is currently unstable and may lead to crashes, best to keep for 0 unless testing locally
-	// lru_size = 0`
+	// cosmos-sdk's interceptConfigs calls rootViper.Unmarshal(&customConfig) where customConfig
+	// is typed as `any`. This causes viper to replace the struct with a bare map, zeroing out
+	// MinGasPrices in the rendered template. Hardcoding the value in the template string is the
+	// only reliable way to ensure app.toml is written with a non-empty minimum-gas-prices on
+	// fresh init, avoiding the "set min gas price in app.toml" startup error.
+	customAppTemplate := strings.Replace(
+		serverconfig.DefaultConfigTemplate,
+		`minimum-gas-prices = "{{ .BaseConfig.MinGasPrices }}"`,
+		`minimum-gas-prices = "0stake"`,
+		1,
+	)
 
 	return customAppTemplate, customAppConfig
 }
