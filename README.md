@@ -1,21 +1,40 @@
 # Vesper Interchain
 
+![Cosmos SDK](https://img.shields.io/badge/Cosmos%20SDK-v0.53.6-2E3148?logo=cosmos&logoColor=white)
+![CometBFT](https://img.shields.io/badge/CometBFT-v0.38.21-1A1A2E?logo=cosmos&logoColor=white)
+![cosmos/evm](https://img.shields.io/badge/cosmos%2Fevm-v1.0.0--rc2-6F42C1?logo=ethereum&logoColor=white)
+![ibc-go](https://img.shields.io/badge/ibc--go-v10.4.0-2E3148)
+![Go](https://img.shields.io/badge/Go-1.25%2B-00ADD8?logo=go&logoColor=white)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue)
+
+![Cosmos SDK License](https://img.shields.io/badge/Cosmos%20SDK-Apache%202.0-blue)
+![CometBFT License](https://img.shields.io/badge/CometBFT-Apache%202.0-blue)
+![cosmos/evm License](https://img.shields.io/badge/cosmos%2Fevm-LGPL--3.0-orange)
+![ibc-go License](https://img.shields.io/badge/ibc--go-Apache%202.0-blue)
+![Ignite CLI License](https://img.shields.io/badge/Ignite%20CLI-Apache%202.0-blue)
+![go-ethereum License](https://img.shields.io/badge/go--ethereum-LGPL--3.0-orange)
+![protobuf License](https://img.shields.io/badge/protobuf-BSD--3--Clause-lightgrey)
+
 **Vesper Interchain** is a Cosmos SDK blockchain that implements a collateral vault and stablecoin protocol with full EVM compatibility. Users deposit collateral, mint the `uvusd` stablecoin against it, earn per-block rewards, and are subject to automated liquidation if their position's health factor falls below the protocol threshold.
 
-The chain exposes its vault logic through both the standard Cosmos transaction interface and a **stateful EVM precompile** at address `0x0000000000000000000000000000000000000900`, enabling Solidity contracts to interact with the protocol natively.
+The chain exposes its vault logic through both the standard Cosmos transaction interface and a stateful EVM precompile at address `0x0000000000000000000000000000000000000900`, enabling Solidity contracts to interact with the protocol natively.
 
 ---
 
 ## Table of Contents
 
+- [Current Project Status](#current-project-status)
 - [Architecture](#architecture)
 - [Modules](#modules)
 - [EVM Integration](#evm-integration)
-- [Build & Install](#build--install)
-- [Running from Scratch](#running-vesper-interchain-from-scratch)
+- [Build and Install](#build-and-install)
+- [Running Vesper Interchain from Scratch](#running-vesper-interchain-from-scratch)
+- [Chain Verification Checklist](#chain-verification-checklist)
+- [Module Validation Commands](#module-validation-commands)
 - [Development](#development)
 - [Testing](#testing)
 - [API Reference](#api-reference)
+- [License](#license)
 
 ---
 
@@ -62,9 +81,33 @@ The chain exposes its vault logic through both the standard Cosmos transaction i
 
 ---
 
+## Current Project Status
+
+### Working
+
+- Cosmos SDK v0.53 chain bootstrapping
+- CometBFT consensus
+- Validator creation
+- Staking
+- Delegation
+- Distribution rewards
+- Governance module
+- Mint module
+- Slashing module
+- Oracle module
+- Stablecoin module
+- Collateral module
+- Liquidation module
+- Upgrade module
+- Bank transfers
+- Genesis initialization
+- Local single-validator network
+
+---
+
 ## Modules
 
-### `x/collateral`
+### x/collateral
 
 Core vault management. Users open positions by depositing collateral (`uatom`) and borrow `uvusd` up to the configured LTV ratio. Positions are tracked individually and evaluated against oracle prices for liquidation eligibility.
 
@@ -93,11 +136,9 @@ Core vault management. Users open positions by depositing collateral (`uatom`) a
 
 ---
 
-### `x/stablecoin`
+### x/stablecoin
 
 Thin mint/burn layer for the `uvusd` stablecoin. The collateral module decides when to mint or burn; this module executes those token operations and maintains a `SupplyState` (total minted, total burned) for auditability.
-
-**Queries**
 
 ```bash
 vesper-interchaind query stablecoin params
@@ -107,7 +148,7 @@ vesper-interchaind query stablecoin total-burned
 
 ---
 
-### `x/oracle`
+### x/oracle
 
 On-chain price feed. A single authorized oracle address posts asset prices with timestamps and source attribution. The collateral module reads these prices to evaluate position health and trigger liquidations. The oracle address is upgradeable via governance.
 
@@ -118,8 +159,6 @@ On-chain price feed. A single authorized oracle address posts asset prices with 
 | `MsgUpdatePrice` | Authorized oracle submits a new price |
 | `MsgUpdateParams` | Governance updates the oracle address |
 
-**Queries**
-
 ```bash
 vesper-interchaind query oracle params
 vesper-interchaind query oracle prices
@@ -127,7 +166,7 @@ vesper-interchaind query oracle prices
 
 ---
 
-### `x/liquidation`
+### x/liquidation
 
 Queue-based liquidation coordination. When the collateral module identifies an unhealthy position, it enqueues a `LiquidationQueue` entry. Anyone can then call `MsgExecuteLiquidation` to execute it, enabling competitive bot participation. Completed liquidations are recorded in `LiquidationRecord` for on-chain history.
 
@@ -140,11 +179,12 @@ Queue-based liquidation coordination. When the collateral module identifies an u
 
 ---
 
-### `x/rewards`
+### x/rewards
 
-Per-block `uvusd` reward distribution using a MasterChef accumulator pattern. A global `RewardAccumulator` increases by `rewardRate / totalShares` each block (in the EndBlocker), keeping cost **O(1) per block** regardless of the number of depositors. Rewards are settled on deposit, withdrawal, and liquidation to prevent gaming.
+Per-block `uvusd` reward distribution using a MasterChef accumulator pattern. A global `RewardAccumulator` increases by `rewardRate / totalShares` each block (in the EndBlocker), keeping cost O(1) per block regardless of the number of depositors. Rewards are settled on deposit, withdrawal, and liquidation to prevent gaming.
 
 **Key mechanics**
+
 - `UpdateShares()` — called by the collateral keeper on position changes
 - `ClaimRewards()` — mints and sends pending `uvusd` to the caller
 - `GetPendingRewards()` — read-only query of claimable amount
@@ -186,13 +226,14 @@ Ratio return values are scaled by `1e18`. Cosmos gas consumption is propagated t
 ### Solidity Interfaces
 
 The `contracts/` directory contains:
+
 - `IVaultPrecompile.sol` — Solidity interface for the vault precompile (with events)
 - `VesperVault.sol` — Sample EVM contract implementation
 - `VUSD.sol` — Stablecoin token contract
 
 ---
 
-## Build & Install
+## Build and Install
 
 **Prerequisites:** Go 1.25+, `make`
 
@@ -206,7 +247,11 @@ This installs `vesper-interchaind` to `~/go/bin/`. Add it to your PATH:
 
 ```bash
 export PATH=$PATH:$HOME/go/bin
-# Make permanent
+```
+
+To make this permanent, add the line above to your `~/.bashrc` or `~/.zshrc`:
+
+```bash
 echo 'export PATH=$PATH:$HOME/go/bin' >> ~/.bashrc   # or ~/.zshrc
 ```
 
@@ -228,6 +273,14 @@ git clone https://github.com/Vesper-Interchain/vesper-interchain.git
 cd vesper-interchain
 make install
 ```
+
+This installs `vesper-interchaind` to `~/go/bin/`. Make sure `~/go/bin` is in your PATH:
+
+```bash
+export PATH=$PATH:$HOME/go/bin
+```
+
+To make it permanent, add that line to your `~/.bashrc` or `~/.zshrc`.
 
 ### Step 2 — Initialize the chain
 
@@ -273,7 +326,7 @@ vesper-interchaind genesis collect-gentxs
 vesper-interchaind genesis validate-genesis
 ```
 
-Expected: `File at .../genesis.json is a valid genesis file`
+Expected output: `File at .../genesis.json is a valid genesis file`
 
 ### Step 7 — Start the chain
 
@@ -281,7 +334,7 @@ Expected: `File at .../genesis.json is a valid genesis file`
 vesper-interchaind start
 ```
 
-You should see blocks being produced every ~5 seconds.
+You should see blocks being produced every approximately 5 seconds.
 
 ### Step 8 — Verify the chain (new terminal)
 
@@ -353,10 +406,178 @@ vesper-interchaind query collateral params
 vesper-interchaind query upgrade module_versions
 ```
 
-> **Note**: If you have an old `vesper-interchaind` binary at `/usr/local/bin/`, replace it after a fresh build:
+> Note: If you have an old `vesper-interchaind` binary at `/usr/local/bin/`, replace it after a fresh build:
 > ```bash
 > sudo cp ~/go/bin/vesper-interchaind /usr/local/bin/vesper-interchaind
 > ```
+
+---
+
+## Chain Verification Checklist
+
+After starting the chain, use this checklist to verify that core blockchain functionality is operating correctly.
+
+### 1. Verify Block Production
+
+Open a second terminal:
+
+```bash
+vesper-interchaind status
+```
+
+Expected:
+
+- Latest block height increases continuously.
+- Node is not catching up.
+- Validator information is present.
+
+### 2. Verify Validator Registration
+
+```bash
+vesper-interchaind query staking validators
+```
+
+Expected:
+
+- At least one validator appears.
+- Validator status is `BOND_STATUS_BONDED`.
+
+Inspect validator details:
+
+```bash
+vesper-interchaind query staking validator \
+  $(vesper-interchaind keys show validator --bech val -a --keyring-backend test)
+```
+
+### 3. Verify Account State
+
+```bash
+vesper-interchaind query auth account \
+  $(vesper-interchaind keys show validator -a --keyring-backend test)
+
+vesper-interchaind query auth account \
+  $(vesper-interchaind keys show bob -a --keyring-backend test)
+```
+
+Expected:
+
+- Accounts exist.
+- Account numbers and sequence values are returned.
+
+### 4. Verify Token Transfer
+
+Send tokens:
+
+```bash
+vesper-interchaind tx bank send validator \
+  $(vesper-interchaind keys show bob -a --keyring-backend test) \
+  1000000stake \
+  --chain-id test-chain-x8xCNe \
+  --keyring-backend test \
+  --fees 1000stake \
+  -y
+```
+
+Verify balances:
+
+```bash
+vesper-interchaind query bank balances \
+  $(vesper-interchaind keys show bob -a --keyring-backend test)
+```
+
+Expected:
+
+- Bob's balance increases.
+- Transaction succeeds with `code: 0`.
+
+### 5. Verify Delegation
+
+Delegate additional stake:
+
+```bash
+vesper-interchaind tx staking delegate \
+  $(vesper-interchaind keys show validator --bech val -a --keyring-backend test) \
+  1000000stake \
+  --from validator \
+  --chain-id test-chain-x8xCNe \
+  --keyring-backend test \
+  --fees 1000stake \
+  -y
+```
+
+Verify:
+
+```bash
+vesper-interchaind query staking delegations \
+  $(vesper-interchaind keys show validator -a --keyring-backend test)
+```
+
+Expected:
+
+- Delegation record exists.
+- Shares increase.
+
+### 6. Verify Distribution Module
+
+```bash
+vesper-interchaind query distribution rewards \
+  $(vesper-interchaind keys show validator -a --keyring-backend test)
+```
+
+Expected:
+
+- Rewards are returned.
+- Validator reward records exist.
+
+---
+
+## Module Validation Commands
+
+The following commands can be used to validate every major module currently integrated into Vesper Interchain.
+
+### Core Cosmos Modules
+
+```bash
+vesper-interchaind query staking params
+vesper-interchaind query slashing params
+vesper-interchaind query mint params
+vesper-interchaind query gov params
+vesper-interchaind query consensus params
+vesper-interchaind query upgrade module_versions
+```
+
+### Oracle Module
+
+```bash
+vesper-interchaind query oracle params
+vesper-interchaind query oracle prices
+```
+
+Note: Price submission requires an authorized oracle account. Unauthorized accounts will receive:
+
+```
+failed to execute message: unauthorized oracle account
+```
+
+### Stablecoin Module
+
+```bash
+vesper-interchaind query stablecoin params
+vesper-interchaind query stablecoin total-minted
+vesper-interchaind query stablecoin total-burned
+```
+
+### Collateral Module
+
+```bash
+vesper-interchaind query collateral params
+```
+
+### Liquidation Module
+
+```bash
+vesper-interchaind query liquidation params
+```
 
 ---
 
@@ -431,11 +652,14 @@ vesper-interchaind query liquidation params
 ```
 
 ---
+Built on Cosmos SDK, CometBFT, cosmos/evm, ibc-go, Ignite CLI, go-ethereum, and Protocol Buffers — see the badges above for each project's license.
+
+---
 
 ## Learn More
 
-- [Cosmos SDK](https://docs.cosmos.network)
-- [CometBFT](https://docs.cometbft.com)
-- [IBC Protocol](https://ibc.cosmos.network)
+- [Cosmos SDK Documentation](https://docs.cosmos.network)
+- [CometBFT Documentation](https://docs.cometbft.com)
+- [IBC Protocol Documentation](https://ibc.cosmos.network)
 - [Ignite CLI](https://ignite.com/cli)
 - [cosmos/evm](https://github.com/cosmos/evm)
